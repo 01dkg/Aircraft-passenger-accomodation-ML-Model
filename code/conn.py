@@ -17,4 +17,11 @@ conn.execute('''CREATE TABLE seating ( row int not null, seat char(1) not null, 
 ''' Inserting Values in Tables'''
 
 conn.execute('''insert into rows_cols values (15, 'ACDF')''')
+row_data = conn.execute('''select nrows, seats from rows_cols''')
+for row in row_data:
+        print("HIII")
+        nrows = row[0]
+        seat_config = row[1]
+        print(nrows,seat_config)
+conn.close()
 
