@@ -9,6 +9,7 @@ import numpy as np
 #                                                                                                                     #
 #######################################################################################################################
 
+
 def read_seat_config():
     conn = sqlite3.connect('airline_seating.db')
     cur = conn.cursor()
@@ -20,6 +21,7 @@ def read_seat_config():
     return nrows,seat_config,seat_col
 
 nrows, seat_config, seat_col = read_seat_config()
+
 
 def read_booking(n):
     column_names = ['passenger_name, no_of_passenger']
@@ -86,8 +88,8 @@ def allot_seats():
         else:
             family_seat_allocation(passenger_name,no_of_passenger)
 
+
 def single_seat_allocation(passenger_name,no_of_passenger):
-    seats, nrows, seat_config, seat_col = generate_seat_map()
     for i in range(nrows-1):
         for j in range(seat_col-1):
            if seats[i][j] == 0.0:
@@ -97,6 +99,7 @@ def single_seat_allocation(passenger_name,no_of_passenger):
     print(seats)
     return i,j
 
+
 def find_empty_seats(no_of_passenger):
     count =0
     for i in range(nrows-1):
@@ -104,6 +107,10 @@ def find_empty_seats(no_of_passenger):
             if seats[i][j] ==0:
                 count +=1
         if count <= no_of_passenger:
+            print("Seats Allocated to all hurray")
+            #Record the columns of empty
+        else:
+            find_empty_seats(no_of_passenger-1)
 
 
 def any_seat_allocation(passenger_name,no_of_passenger):
@@ -111,5 +118,5 @@ def any_seat_allocation(passenger_name,no_of_passenger):
 
 
 def family_seat_allocation(passenger_name,no_of_passenger):
-    print("Yayaya")
+    print("Seat is for", passenger_name, no_of_passenger)
 allot_seats()
