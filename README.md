@@ -4,4 +4,3 @@
 - Gupta, Deepak Kuumar (16200660)
 - Goyal, Shruti (16200726)
 - Shivam, Shalini (16200815)
-
