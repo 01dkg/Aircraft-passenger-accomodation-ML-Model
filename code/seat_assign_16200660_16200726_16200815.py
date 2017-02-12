@@ -39,7 +39,7 @@ def read_booking(n):
 
 def generate_seat_map():
     nrows, seat_config, seat_col = read_seat_config()
-    seats = np.zeros(shape=(nrows-1, seat_col-1))
+    seats = np.zeros(shape=(nrows-1, seat_col))
     return seats
 
 seats = generate_seat_map()
