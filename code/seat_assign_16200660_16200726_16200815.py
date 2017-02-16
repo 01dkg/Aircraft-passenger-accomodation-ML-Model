@@ -69,7 +69,7 @@ def check_overbooking():
         exit(0)
 
 
-def empty_booking_list():
+def is_empty_booking_list():
     nrows, seat_config, seat_col = read_seat_config()
     for i in range(nrows + 1):
         passenger_name, no_of_passenger = read_booking(1)
@@ -84,11 +84,14 @@ def empty_booking_list():
 
 
 def allot_seats():
-    empty_booking_list()
+    is_empty_booking_list()
     for n in range(nrows+1):
         passenger_name, no_of_passenger = read_booking(n)
         if no_of_passenger == 1:
             i,j = single_seat_allocation(passenger_name,no_of_passenger)
+            '''
+            Calling database here to update seat number
+            '''
             print("Seat Allocated to ",passenger_name, " is >>",i,j)
             break
         else:
