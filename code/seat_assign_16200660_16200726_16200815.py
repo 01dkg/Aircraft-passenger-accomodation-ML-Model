@@ -36,7 +36,8 @@ def read_booking(n):
     no_of_passenger = df.loc[n,1]
     return passenger_name,no_of_passenger
 
-
+#Seat Matrix
+#0 is empty, 1 is occupied
 def generate_seat_map():
     nrows, seat_config, seat_col = read_seat_config()
     seats = np.zeros(shape=(nrows-1, seat_col))
@@ -82,8 +83,7 @@ def is_empty_booking_list():
 #                                                                                                                     #
 #######################################################################################################################
 
-
-def allot_seats():
+def _main_():
     is_empty_booking_list()
     for n in range(nrows+1):
         passenger_name, no_of_passenger = read_booking(n)
@@ -93,20 +93,31 @@ def allot_seats():
             Calling database here to update seat number
             '''
             print("Seat Allocated to ",passenger_name, " is >>",i,j)
-            break
+            update_seat_tracker(empty_seat_row,i)
         else:
             family_seat_allocation(passenger_name,no_of_passenger)
 
+def create_seat_tracker():
+     empty_seat_row =[]
+     for i in range(nrows):
+         empty_seat_row.append(seat_col)
+     return empty_seat_row
 
+def update_seat_tracker(empty_seat_row,row):
+    val = empty_seat_row[row]
+    empty_seat_row[row]=val-1
+    return empty_seat_row
+
+create_seat_tracker()
 def single_seat_allocation(passenger_name,no_of_passenger):
-    for i in range(nrows-1):
-        for j in range(seat_col-1):
+    for i in range(nrows):
+        for j in range(seat_col):
            if seats[i][j] == 0.0:
                seats[i][j] = 1.0
-               break;
-        break
-    print(seats)
-    return i,j
+               return i, j
+
+def case2_seat_allocation(passenger_name,no_of_passenger):
+
 
 
 def find_empty_seats(no_of_passenger):
@@ -127,5 +138,10 @@ def any_seat_allocation(passenger_name,no_of_passenger):
 
 
 def family_seat_allocation(passenger_name,no_of_passenger):
-    print("Seat is for", passenger_name, no_of_passenger)
-allot_seats()
+    #print("Seat is for", passenger_name, no_of_passenger)
+    print(">>>>>>>>>>>>")
+empty_seat_row = create_seat_tracker()
+_main_()
+
+print(empty_seat_row)
+print(seats)
