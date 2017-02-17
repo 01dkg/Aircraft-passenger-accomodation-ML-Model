@@ -158,6 +158,9 @@ def group_seat_allot(passenger_name,no_of_passenger):
 #                                                                                                                     #
 #######################################################################################################################
 def group_seat_available_row2(no_of_passenger):
+    no_of_rows1= no_of_passenger // seat_col
+    no_of_rows2= no_of_passenger % seat_col
+    print(no_of_rows1,no_of_rows2)
     for i in range(nrows-1):
          if empty_seat_row[i] + empty_seat_row[i+1] >= no_of_passenger:
             return i
