@@ -94,6 +94,8 @@ def _main_():
             '''
             print("Seat Allocated to ",passenger_name, " is >>",i,j)
             update_seat_tracker(empty_seat_row,i)
+        elif no_of_passenger > 1 or no_of_passenger < seat_col:
+            group_seat_allot(passenger_name,no_of_passenger)
         else:
             family_seat_allocation(passenger_name,no_of_passenger)
 
@@ -116,7 +118,32 @@ def single_seat_allocation(passenger_name,no_of_passenger):
                seats[i][j] = 1.0
                return i, j
 
-def case2_seat_allocation(passenger_name,no_of_passenger):
+def group_seat_available_row(passenger_name,no_of_passenger):
+    for i in range(nrows+1):
+        if empty_seat_row[i] >= no_of_passenger:
+            return i
+
+def group_seat_check(passenger_name,no_of_passenger):
+    row = group_seat_available_row(passenger_name,no_of_passenger)
+    temp = []
+    for j in range(seat_col+1):
+        if seats[row][j] == 0:
+            temp.append(j)
+        return temp,row
+
+
+def group_seat_allot(passenger_name,no_of_passenger):
+    temp, row = group_seat_check(passenger_name,no_of_passenger)
+    seat_allocated = []
+    print(temp)
+    for i in range(no_of_passenger):
+        col = temp[i]
+        seat_allocated.append(col)
+        seats[row][col] = 1
+        print("Seat Allocated to ", passenger_name, " is [",row,col,"]")
+    return seat_allocated,row
+
+
 
 
 
