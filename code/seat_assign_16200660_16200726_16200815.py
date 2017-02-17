@@ -1,7 +1,7 @@
  ######################################################################################################################
 #                                                                                                                     #
 #                                         ARI Programming Assignment                                                  #
-#             Author: Deepak K Gupta and Shruti Goyal
+#                                   Author: Deepak K Gupta and Shruti Goyal                                           #
 #                                                                                                                     #
 #######################################################################################################################
 import sys
@@ -104,9 +104,6 @@ def update_seat_tracker(empty_seat_row,row):
     empty_seat_row[row]= val-1
     return empty_seat_row
 
-def update_seat_tracker_by_val(empty_seat_row, empty_seats,row):
-    empty_seat_row[row]= empty_seat_row[row] - empty_seats
-    return empty_seat_row
 create_seat_tracker()
 
 #######################################################################################################################
@@ -188,13 +185,12 @@ def seat_check(row):
             temp.append(j)
     return temp
 
+
 def allot(row,empty_seats,passenger_name):
     seat_allocated = []
     temp = seat_check(row)
-    print(temp)
     for i in range(empty_seats):
         col = temp[i]
-        print("col",col,empty_seats)
         seat_allocated.append(col)
         seats[row][col] = 1
         print("Seat Allocated to ", passenger_name, " is [", row, col, "]")
