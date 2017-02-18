@@ -193,6 +193,8 @@ def group_seat_allot_case3(passenger_name,no_of_passenger):
 #######################################################################################################################
 
 def _main_():
+    passenger_refused = 0
+    passenger_seated_away = 0
     for n in range(total_booking):
         passenger_name, no_of_passenger = read_booking(n)
 
@@ -208,6 +210,7 @@ def _main_():
                 elif total_available_seats(empty_seat_row)== no_of_passenger:
                     for i in range(no_of_passenger):
                         single_seat_allocation(passenger_name, no_of_passenger)
+                        passenger_seated_away +=1
             elif no_of_passenger > seat_col:
                 #group_seat_allot2(passenger_name,no_of_passenger)
                 if total_available_seats(empty_seat_row) > no_of_passenger:
@@ -215,16 +218,20 @@ def _main_():
                 elif total_available_seats(empty_seat_row)== no_of_passenger:
                     for i in range(no_of_passenger):
                         single_seat_allocation(passenger_name, no_of_passenger)
+                        passenger_seated_away += 1
         elif total_available_seats(empty_seat_row)==0:
             print("Poor You",passenger_name)
             print("Flight is Fully Booked")
+            passenger_refused += no_of_passenger
         elif seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) < no_of_passenger:
             print("Skipping >> ", passenger_name)
+            passenger_refused += no_of_passenger
             continue
         else:
             print("System Error")
             exit(0)
-
+    print("Passenger Refused So Far", passenger_refused)
+    print("Passenger Seated Away",passenger_seated_away)
 empty_seat_row = create_seat_tracker()
 _main_()
 print(empty_seat_row)
