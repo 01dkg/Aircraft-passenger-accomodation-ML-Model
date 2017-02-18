@@ -112,13 +112,17 @@ def update_seat_tracker(empty_seat_row, row):
     empty_seat_row[row] = val - 1
     return empty_seat_row
 
+def total_available_seats(empty_seat_row):
+    sum(empty_seat_row)
+    return sum(empty_seat_row)
+
 
 create_seat_tracker()
 
 
 #######################################################################################################################
 #                                                                                                                     #
-#                                         Single Seat Allocation                                                      #
+#                                         Case 1 : Single Seat Allocation                                             #
 #                                                                                                                     #
 #######################################################################################################################
 
@@ -128,6 +132,8 @@ def single_seat_allocation(passenger_name, no_of_passenger):
         for j in range(seat_col):
             if seats[i][j] == 0.0:
                 seats[i][j] = 1.0
+                update_seat_tracker(empty_seat_row, i)
+                print("Seat Allocated to ", passenger_name, " is >>", i, j)
                 return i, j
 
 
@@ -191,20 +197,27 @@ def _main_():
             '''
             Calling database here to update seat number
             '''
-            print("Seat Allocated to ", passenger_name, " is >>", i, j)
-            update_seat_tracker(empty_seat_row, i)
+
         elif no_of_passenger > 1 and no_of_passenger <= seat_col:
-            group_seat_allot(passenger_name, no_of_passenger)
+            if total_available_seats(empty_seat_row) > no_of_passenger:
+                group_seat_allot(passenger_name, no_of_passenger)
+            elif total_available_seats(empty_seat_row)== no_of_passenger:
+                for i in range(no_of_passenger):
+                    single_seat_allocation(passenger_name, no_of_passenger)
         elif no_of_passenger > seat_col:
             #group_seat_allot2(passenger_name,no_of_passenger)
-            group_seat_allot_case3(passenger_name, no_of_passenger)
+            if total_available_seats(empty_seat_row) > no_of_passenger:
+                group_seat_allot_case3(passenger_name, no_of_passenger)
+            elif total_available_seats(empty_seat_row)== no_of_passenger:
+                for i in range(no_of_passenger):
+                    single_seat_allocation(passenger_name, no_of_passenger)
 
 
 empty_seat_row = create_seat_tracker()
 _main_()
 print(empty_seat_row)
 print(seats)
-
+print(total_available_seats(empty_seat_row))
 
 #######################################################################################################################
 #                                                                                                                     #
