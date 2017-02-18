@@ -1,14 +1,19 @@
-######################################################################################################################
+#######################################################################################################################
 #                                                                                                                     #
-#                                         ARI Programming Assignment                                                  #
-#                                   Author: Deepak K Gupta and Shruti Goyal                                           #
+#                                  MIS40570: Analytics Research and Implementation                                    #
+#                                 ARI Programming Assignment - Airline Seating                                        #
+#                                            Due Date: Feburary 24, 2017                                              #
+#                                   Author: Deepak Kumar Gupta and Shruti Goyal                                       #
+#                                             16200660           16200726                                             #
 #                                                                                                                     #
 #######################################################################################################################
+
+
+# Run this code G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
 import sys
 import sqlite3
 import pandas as pd
 import numpy as np
-
 
 ######################################################################################################################
 #                                                                                                                     #
@@ -95,8 +100,10 @@ def is_empty_booking_list():
 
 
 def seats_not_full(empty_seat_row):
-    if sum(empty_seat_row)!=0:
+    if sum(empty_seat_row) != 0:
         return True
+
+
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Tracker Functions                                                      #
@@ -124,6 +131,7 @@ def total_available_seats(empty_seat_row):
 
 create_seat_tracker()
 
+
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Encoder Function                                                       #
@@ -131,11 +139,12 @@ create_seat_tracker()
 #######################################################################################################################
 
 
-def seats_encoder(row,col):
-    row_number = row +1
+def seats_encoder(row, col):
+    row_number = row + 1
     seat_number = seat_config[col]
-    seat = str(row_number)+seat_number
-    return seat, row_number,seat_number
+    seat = str(row_number) + seat_number
+    return seat, row_number, seat_number
+
 
 #######################################################################################################################
 #                                                                                                                     #
@@ -143,7 +152,7 @@ def seats_encoder(row,col):
 #                                                                                                                     #
 #######################################################################################################################
 
-#Reference: http://www.sqlitetutorial.net/sqlite-python/update/
+# Reference: http://www.sqlitetutorial.net/sqlite-python/update/
 
 
 def update_seats(conn, seating):
@@ -205,16 +214,16 @@ def single_seat_allocation(passenger_name, no_of_passenger):
                 seats[i][j] = 1.0
                 update_seat_tracker(empty_seat_row, i)
                 seat, row_number, seat_number = seats_encoder(i, j)
-                print("Seat Allocated to ", passenger_name, " is ",seat )
+                print("Seat Allocated to ", passenger_name, " is ", seat)
                 conn = create_connection(db)
                 with conn:
-                    update_seats(conn, (row_number,seat_number,passenger_name))
+                    update_seats(conn, (row_number, seat_number, passenger_name))
                 return i, j
 
 
 #######################################################################################################################
 #                                                                                                                     #
-#                                         Case 2 Group Seats                                                          #
+#                                         Case 2 : Seat Allocation                                                    #
 #                           no_of_passenger > 1 or no_of_passenger <= seat_col                                        #
 #                                                                                                                     #
 #######################################################################################################################
@@ -245,27 +254,31 @@ def group_seat_allot(passenger_name, no_of_passenger):
         seat, row_number, seat_number = seats_encoder(row, col)
         conn = create_connection(db)
         with conn:
-            update_seats(conn, (row_number, seat_number,passenger_name))
+            update_seats(conn, (row_number, seat_number, passenger_name))
     return seat_allocated, row
+
 
 def is_seats_in_a_row(no_of_passenger):
     for i in range(nrows):
         if empty_seat_row[i] >= no_of_passenger:
             return True
+
+
 #######################################################################################################################
 #                                                                                                                     #
-#                                         Case 3 Group Seats                                                          #
+#                                         Case 3 : Seat Allocation                                                    #
 #                                        no_of_passenger > seat_col                                                   #
 #                                                                                                                     #
 #######################################################################################################################
 
 
-def group_seat_allot_case3(passenger_name,no_of_passenger):
+def group_seat_allot_case3(passenger_name, no_of_passenger):
     no_of_rows = no_of_passenger // seat_col
     remaining_seats = no_of_passenger % seat_col
     for i in range(no_of_rows):
         group_seat_allot(passenger_name, 4)
     group_seat_allot(passenger_name, remaining_seats)
+
 
 #######################################################################################################################
 #                                                                                                                     #
@@ -274,7 +287,6 @@ def group_seat_allot_case3(passenger_name,no_of_passenger):
 #######################################################################################################################
 
 def _main_():
-
     passenger_refused = 0.0
     passenger_seated_away = 0
 
@@ -289,24 +301,24 @@ def _main_():
 
                 Flag = is_seats_in_a_row(no_of_passenger)
                 if total_available_seats(empty_seat_row) > no_of_passenger and Flag == True:
-                    #And each row has only 1 seat then allocate separately
+                    # And each row has only 1 seat then allocate separately
                     group_seat_allot(passenger_name, no_of_passenger)
-                elif total_available_seats(empty_seat_row)>= no_of_passenger:
+                elif total_available_seats(empty_seat_row) >= no_of_passenger:
                     for i in range(no_of_passenger):
                         single_seat_allocation(passenger_name, no_of_passenger)
-                        passenger_seated_away +=1.0
+                        passenger_seated_away += 1.0
 
             elif no_of_passenger > seat_col:
 
                 if total_available_seats(empty_seat_row) > no_of_passenger:
                     group_seat_allot_case3(passenger_name, no_of_passenger)
-                elif total_available_seats(empty_seat_row)== no_of_passenger:
+                elif total_available_seats(empty_seat_row) == no_of_passenger:
                     for i in range(no_of_passenger):
                         single_seat_allocation(passenger_name, no_of_passenger)
                         passenger_seated_away += 1.0
 
-        elif total_available_seats(empty_seat_row)==0:
-            print("Flight is Fully Booked, Sorry ",passenger_name)
+        elif total_available_seats(empty_seat_row) == 0:
+            print("Flight is Fully Booked, Sorry ", passenger_name)
             passenger_refused += no_of_passenger
 
         elif seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) < no_of_passenger:
@@ -318,10 +330,12 @@ def _main_():
             print("System Error")
             exit(0)
     print("Passenger Refused So Far", passenger_refused)
-    print("Passenger Seated Away",passenger_seated_away)
+    print("Passenger Seated Away", passenger_seated_away)
     conn = create_connection(db)
     with conn:
         update_metrics(conn, (passenger_refused, passenger_seated_away))
+
+
 empty_seat_row = create_seat_tracker()
 _main_()
 print(empty_seat_row)
