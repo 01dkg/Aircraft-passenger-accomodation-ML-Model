@@ -93,6 +93,9 @@ def is_empty_booking_list():
             exit(0)
 
 
+def seats_not_full(empty_seat_row):
+    if sum(empty_seat_row)!=0:
+        return True
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Tracker Functions                                                      #
@@ -192,26 +195,35 @@ def group_seat_allot_case3(passenger_name,no_of_passenger):
 def _main_():
     for n in range(total_booking):
         passenger_name, no_of_passenger = read_booking(n)
-        if no_of_passenger == 1:
-            i, j = single_seat_allocation(passenger_name, no_of_passenger)
-            '''
-            Calling database here to update seat number
-            '''
 
-        elif no_of_passenger > 1 and no_of_passenger <= seat_col:
-            if total_available_seats(empty_seat_row) > no_of_passenger:
-                group_seat_allot(passenger_name, no_of_passenger)
-            elif total_available_seats(empty_seat_row)== no_of_passenger:
-                for i in range(no_of_passenger):
-                    single_seat_allocation(passenger_name, no_of_passenger)
-        elif no_of_passenger > seat_col:
-            #group_seat_allot2(passenger_name,no_of_passenger)
-            if total_available_seats(empty_seat_row) > no_of_passenger:
-                group_seat_allot_case3(passenger_name, no_of_passenger)
-            elif total_available_seats(empty_seat_row)== no_of_passenger:
-                for i in range(no_of_passenger):
-                    single_seat_allocation(passenger_name, no_of_passenger)
-
+        if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
+            if no_of_passenger == 1:
+                i, j = single_seat_allocation(passenger_name, no_of_passenger)
+                '''
+                Calling database here to update seat number
+                '''
+            elif no_of_passenger > 1 and no_of_passenger <= seat_col:
+                if total_available_seats(empty_seat_row) > no_of_passenger:
+                    group_seat_allot(passenger_name, no_of_passenger)
+                elif total_available_seats(empty_seat_row)== no_of_passenger:
+                    for i in range(no_of_passenger):
+                        single_seat_allocation(passenger_name, no_of_passenger)
+            elif no_of_passenger > seat_col:
+                #group_seat_allot2(passenger_name,no_of_passenger)
+                if total_available_seats(empty_seat_row) > no_of_passenger:
+                    group_seat_allot_case3(passenger_name, no_of_passenger)
+                elif total_available_seats(empty_seat_row)== no_of_passenger:
+                    for i in range(no_of_passenger):
+                        single_seat_allocation(passenger_name, no_of_passenger)
+        elif total_available_seats(empty_seat_row)==0:
+            print("Poor You",passenger_name)
+            print("Flight is Fully Booked")
+        elif seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) < no_of_passenger:
+            print("Skipping >> ", passenger_name)
+            continue
+        else:
+            print("System Error")
+            exit(0)
 
 empty_seat_row = create_seat_tracker()
 _main_()
