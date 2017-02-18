@@ -166,18 +166,58 @@ def group_seat_allot(passenger_name, no_of_passenger):
 
 #######################################################################################################################
 #                                                                                                                     #
-#                                         Case 2 Group Seats                                                          #
+#                                         Case 3 Group Seats                                                          #
 #                                        no_of_passenger > seat_col                                                   #
 #                                                                                                                     #
 #######################################################################################################################
+def group_seat_allot_case3(passenger_name,no_of_passenger):
+    no_of_rows = no_of_passenger // seat_col
+    remaining_seats = no_of_passenger % seat_col
+    for i in range(no_of_rows):
+        group_seat_allot(passenger_name, 4)
+    group_seat_allot(passenger_name, remaining_seats)
+
+#######################################################################################################################
+#                                                                                                                     #
+#                                         Main Function Call and Body                                                 #
+#                                                                                                                     #
+#######################################################################################################################
+
+def _main_():
+    for n in range(total_booking):
+        passenger_name, no_of_passenger = read_booking(n)
+        if no_of_passenger == 1:
+            i, j = single_seat_allocation(passenger_name, no_of_passenger)
+            '''
+            Calling database here to update seat number
+            '''
+            print("Seat Allocated to ", passenger_name, " is >>", i, j)
+            update_seat_tracker(empty_seat_row, i)
+        elif no_of_passenger > 1 and no_of_passenger <= seat_col:
+            group_seat_allot(passenger_name, no_of_passenger)
+        elif no_of_passenger > seat_col:
+            #group_seat_allot2(passenger_name,no_of_passenger)
+            group_seat_allot_case3(passenger_name, no_of_passenger)
+
+
+empty_seat_row = create_seat_tracker()
+_main_()
+print(empty_seat_row)
+print(seats)
+
+
+#######################################################################################################################
+#                                                                                                                     #
+#                                         Case 3 Group Seats                                                          #
+#                                        Old Function                                                                 #
+#                                                                                                                     #
+#######################################################################################################################
+
+
 def group_seat_available_row2(no_of_passenger):
-    no_of_rows1 = no_of_passenger // seat_col
-    no_of_rows2 = no_of_passenger % seat_col
-    print(no_of_rows1, no_of_rows2)
     for i in range(nrows - 1):
         if empty_seat_row[i] + empty_seat_row[i + 1] >= no_of_passenger:
             return i
-
 
 def group_seat_check2(passenger_name, no_of_passenger):
     row = group_seat_available_row2(no_of_passenger)
@@ -215,30 +255,3 @@ def allot(row, empty_seats, passenger_name):
         update_seat_tracker(empty_seat_row, row)
     return seat_allocated, row
 
-
-#######################################################################################################################
-#                                                                                                                     #
-#                                         Main Function Call and Body                                                 #
-#                                                                                                                     #
-#######################################################################################################################
-
-def _main_():
-    for n in range(total_booking):
-        passenger_name, no_of_passenger = read_booking(n)
-        if no_of_passenger == 1:
-            i, j = single_seat_allocation(passenger_name, no_of_passenger)
-            '''
-            Calling database here to update seat number
-            '''
-            print("Seat Allocated to ", passenger_name, " is >>", i, j)
-            update_seat_tracker(empty_seat_row, i)
-        elif no_of_passenger > 1 and no_of_passenger <= seat_col:
-            group_seat_allot(passenger_name, no_of_passenger)
-        elif no_of_passenger > seat_col:
-            group_seat_allot2(passenger_name, no_of_passenger)
-
-
-empty_seat_row = create_seat_tracker()
-_main_()
-print(empty_seat_row)
-print(seats)

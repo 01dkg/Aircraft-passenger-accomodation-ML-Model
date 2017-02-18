@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/code/airline_seating.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="airline_seating.db [2]" uuid="875e5bc4-88c4-4b11-845c-80ae5b38a725">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/code/airline_seating.db</jdbc-url>
+    </data-source>
   </component>
 </project>
