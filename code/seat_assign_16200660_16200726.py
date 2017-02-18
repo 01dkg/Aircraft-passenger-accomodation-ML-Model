@@ -172,7 +172,10 @@ def group_seat_allot(passenger_name, no_of_passenger):
         print("Seat Allocated to ", passenger_name, " is [", row, col, "]")
     return seat_allocated, row
 
-
+def is_seats_in_a_row(no_of_passenger):
+    for i in range(nrows):
+        if empty_seat_row[i] >= no_of_passenger:
+            return True
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Case 3 Group Seats                                                          #
@@ -197,7 +200,6 @@ def _main_():
     passenger_seated_away = 0
     for n in range(total_booking):
         passenger_name, no_of_passenger = read_booking(n)
-
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
             if no_of_passenger == 1:
                 i, j = single_seat_allocation(passenger_name, no_of_passenger)
@@ -205,9 +207,11 @@ def _main_():
                 Calling database here to update seat number
                 '''
             elif no_of_passenger > 1 and no_of_passenger <= seat_col:
-                if total_available_seats(empty_seat_row) > no_of_passenger:
+                Flag = is_seats_in_a_row(no_of_passenger)
+                if total_available_seats(empty_seat_row) > no_of_passenger and Flag == True:
+                    #And each row has only 1 seat then allocate separately
                     group_seat_allot(passenger_name, no_of_passenger)
-                elif total_available_seats(empty_seat_row)== no_of_passenger:
+                elif total_available_seats(empty_seat_row)>= no_of_passenger:
                     for i in range(no_of_passenger):
                         single_seat_allocation(passenger_name, no_of_passenger)
                         passenger_seated_away +=1
