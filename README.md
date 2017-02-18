@@ -1,5 +1,7 @@
-# UCD Analytics Research & Implementation MIS40750 Programming Assignment
+# MIS40750 Analytics Research & Implementation
 
-#Submiited by:
-- Gupta, Deepak Kuumar (16200660)
-- Goyal, Shruti (16200726)
+### Programming Assignment
+
+# Submiited by:
+* Gupta, Deepak Kuumar (16200660)
+* Goyal, Shruti (16200726)
