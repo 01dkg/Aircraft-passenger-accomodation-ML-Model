@@ -214,7 +214,6 @@ def single_seat_allocation(passenger_name, no_of_passenger):
                 update_seat_tracker(empty_seat_row, i)
                 seat, row_number, seat_number = seats_encoder(i, j)
                 print("Seat Allocated to ", passenger_name, " is ", seat)
-                t.rows.append([seat,passenger_name])
                 conn = create_connection(db)
                 with conn:
                     update_seats(conn, (row_number, seat_number, passenger_name))
@@ -250,9 +249,8 @@ def group_seat_allot(passenger_name, no_of_passenger):
         seat_allocated.append(col)
         seats[row][col] = 1
         update_seat_tracker(empty_seat_row, row)
-        print("Seat Allocated to ", passenger_name, " is ", seats_encoder(row, col))
         seat, row_number, seat_number = seats_encoder(row, col)
-        t.rows.append([seat, passenger_name])
+        print("Seat Allocated to ", passenger_name, " is ", seat)
         conn = create_connection(db)
         with conn:
            update_seats(conn, (row_number, seat_number, passenger_name))
@@ -334,9 +332,5 @@ def _main_():
     conn = create_connection(db)
     with conn:
         update_metrics(conn, (passenger_refused, passenger_seated_away))
-
 empty_seat_row = create_seat_tracker()
 _main_()
-print(empty_seat_row)
-print(seats)
-print(total_available_seats(empty_seat_row))
