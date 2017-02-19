@@ -286,7 +286,6 @@ def group_seat_allot_case3(passenger_name, no_of_passenger):
 #                                         Main Function Call and Body                                                 #
 #                                                                                                                     #
 #######################################################################################################################
-t = HTML.Table(header_row=['x', 'square(x)', 'cube(x)'])
 def _main_():
 
     passenger_refused = 0.0
