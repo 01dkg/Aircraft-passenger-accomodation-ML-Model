@@ -14,6 +14,7 @@ import sys
 import sqlite3
 import pandas as pd
 import numpy as np
+import html
 
 ######################################################################################################################
 #                                                                                                                     #
@@ -145,6 +146,9 @@ def seats_encoder(row, col):
     seat = str(row_number) + seat_number
     return seat, row_number, seat_number
 
+def html_seat_map(seat, passenger_name):
+    table_data = [seat,passenger_name]
+    return
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Database Functions                                                          #
@@ -216,8 +220,8 @@ def single_seat_allocation(passenger_name, no_of_passenger):
                 print("Seat Allocated to ", passenger_name, " is ", seat)
                 t.rows.append([seat,passenger_name])
                 conn = create_connection(db)
-                with conn:
-                    update_seats(conn, (row_number, seat_number, passenger_name))
+                # with conn:
+                    #update_seats(conn, (row_number, seat_number, passenger_name))
                 return i, j
 
 
@@ -254,8 +258,8 @@ def group_seat_allot(passenger_name, no_of_passenger):
         seat, row_number, seat_number = seats_encoder(row, col)
         t.rows.append([seat, passenger_name])
         conn = create_connection(db)
-        with conn:
-           update_seats(conn, (row_number, seat_number, passenger_name))
+        #with conn:
+           # update_seats(conn, (row_number, seat_number, passenger_name))
     return seat_allocated, row
 
 
@@ -291,6 +295,7 @@ def _main_():
 
     passenger_refused = 0.0
     passenger_seated_away = 0
+
     for n in range(total_booking):
         passenger_name, no_of_passenger = read_booking(n)
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
@@ -335,6 +340,8 @@ def _main_():
     conn = create_connection(db)
     with conn:
         update_metrics(conn, (passenger_refused, passenger_seated_away))
+    htmlcode = str(t)
+    print(htmlcode)
 
 empty_seat_row = create_seat_tracker()
 _main_()
