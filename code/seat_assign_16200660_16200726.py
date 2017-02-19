@@ -14,6 +14,7 @@ import sys
 import sqlite3
 import pandas as pd
 import numpy as np
+import html
 
 ######################################################################################################################
 #                                                                                                                     #
@@ -145,7 +146,9 @@ def seats_encoder(row, col):
     seat = str(row_number) + seat_number
     return seat, row_number, seat_number
 
-
+def html_seat_map(seat, passenger_name):
+    table_data = [seat,passenger_name]
+    return
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Database Functions                                                          #
@@ -215,9 +218,10 @@ def single_seat_allocation(passenger_name, no_of_passenger):
                 update_seat_tracker(empty_seat_row, i)
                 seat, row_number, seat_number = seats_encoder(i, j)
                 print("Seat Allocated to ", passenger_name, " is ", seat)
+                t.rows.append([seat,passenger_name])
                 conn = create_connection(db)
-                with conn:
-                    update_seats(conn, (row_number, seat_number, passenger_name))
+                # with conn:
+                    #update_seats(conn, (row_number, seat_number, passenger_name))
                 return i, j
 
 
@@ -252,9 +256,10 @@ def group_seat_allot(passenger_name, no_of_passenger):
         update_seat_tracker(empty_seat_row, row)
         print("Seat Allocated to ", passenger_name, " is ", seats_encoder(row, col))
         seat, row_number, seat_number = seats_encoder(row, col)
+        t.rows.append([seat, passenger_name])
         conn = create_connection(db)
-        with conn:
-            update_seats(conn, (row_number, seat_number, passenger_name))
+        #with conn:
+           # update_seats(conn, (row_number, seat_number, passenger_name))
     return seat_allocated, row
 
 
@@ -285,8 +290,9 @@ def group_seat_allot_case3(passenger_name, no_of_passenger):
 #                                         Main Function Call and Body                                                 #
 #                                                                                                                     #
 #######################################################################################################################
-
+t = HTML.Table(header_row=['x', 'square(x)', 'cube(x)'])
 def _main_():
+
     passenger_refused = 0.0
     passenger_seated_away = 0
 
@@ -322,7 +328,7 @@ def _main_():
             passenger_refused += no_of_passenger
 
         elif seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) < no_of_passenger:
-            print("Skipping >> ", passenger_name)
+            print("Can't Accommodate You", passenger_name)
 
             passenger_refused += no_of_passenger
             continue
@@ -334,7 +340,8 @@ def _main_():
     conn = create_connection(db)
     with conn:
         update_metrics(conn, (passenger_refused, passenger_seated_away))
-
+    htmlcode = str(t)
+    print(htmlcode)
 
 empty_seat_row = create_seat_tracker()
 _main_()
