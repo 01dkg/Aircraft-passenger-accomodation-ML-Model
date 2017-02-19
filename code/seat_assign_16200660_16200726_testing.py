@@ -14,7 +14,6 @@ import sys
 import sqlite3
 import pandas as pd
 import numpy as np
-import HTML
 from pprint import pprint as pp
 
 ######################################################################################################################
@@ -345,8 +344,5 @@ def _main_():
     with conn:
         update_metrics(conn, (passenger_refused, passenger_seated_away))
     pp(x)
-    table_data= [x]
-    htmlcode = HTML.table(table_data)
-    print(htmlcode)
 empty_seat_row = create_seat_tracker()
 _main_()
