@@ -24,6 +24,10 @@ db = sys.argv[1]
 filename = sys.argv[2]
 
 
+#This function read nrows and seat_config from rows_cols table in Database
+# seat_col storing the columns in aircraft seat map by calculating length of seat_config variable
+
+
 def read_seat_config():
     conn = sqlite3.connect(db)
     cur = conn.cursor()
@@ -32,17 +36,13 @@ def read_seat_config():
         nrows = row[0]
         seat_config = row[1]
         seat_col = len(seat_config)
+    valid_nrows_seat_config(nrows,seat_config)
     return nrows, seat_config, seat_col
 
 
 def read_rows_in_booking():
     df = pd.read_csv(filename, header=None)
     return len(df)
-
-
-nrows, seat_config, seat_col = read_seat_config()
-total_booking = read_rows_in_booking()
-
 
 def read_booking(n):
     column_names = ['passenger_name, no_of_passenger']
@@ -59,11 +59,11 @@ def read_booking(n):
 
 def generate_seat_map():
     nrows, seat_config, seat_col = read_seat_config()
+    valid_nrows_seat_config(nrows, seat_config)
     seats = np.zeros(shape=(nrows, seat_col))
     return seats
 
 
-seats = generate_seat_map()
 
 ######################################################################################################################
 #                                                                                                                     #
@@ -90,13 +90,17 @@ def check_overbooking():
         exit(0)
 
 
-def is_empty_booking_list():
-    nrows, seat_config, seat_col = read_seat_config()
+def is_empty_booking_list(passenger_name,no_of_passenger):
     for i in range(nrows):
-        passenger_name, no_of_passenger = read_booking(1)
         if passenger_name == "" or no_of_passenger == 0 or no_of_passenger == " ":
             print("Cannot Proceed: Passenger Information is Missing")
             exit(0)
+
+
+def is_no_of_passenger_invalid_entry(no_of_passenger):
+    if no_of_passenger <=0 or isinstance(no_of_passenger, str):
+        print("Cannot Proceed: No_of_Passenger entry is invalid")
+        exit(0)
 
 
 def seats_not_full(empty_seat_row):
@@ -104,6 +108,14 @@ def seats_not_full(empty_seat_row):
         return True
 
 
+def valid_nrows_seat_config(nrows,seat_config):
+    if nrows <=0 or isinstance(nrows,str) or isinstance(seat_config,int):
+        print("Cannot Proceed: Invalid value of nrows or seat_config")
+        exit(1)
+
+def call_validity_functions(passenger_name,no_of_passenger):
+    is_empty_booking_list(passenger_name, no_of_passenger)
+    is_no_of_passenger_invalid_entry(no_of_passenger)
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Tracker Functions                                                      #
@@ -127,9 +139,6 @@ def update_seat_tracker(empty_seat_row, row):
 def total_available_seats(empty_seat_row):
     sum(empty_seat_row)
     return sum(empty_seat_row)
-
-
-create_seat_tracker()
 
 
 #######################################################################################################################
@@ -161,11 +170,11 @@ def update_seats(conn, seating):
     :param task:
     :return: project id
     """
-    # sql = ''' UPDATE seating
-    #           SET name = ?
-    #           WHERE row = ? AND seat = ?'''
+    sql = ''' UPDATE seating
+               SET name = ?
+               WHERE row = ? AND seat = ?'''
 
-    sql = ''' INSERT INTO seating (row,seat,name) VALUES (? , ? ,? );'''
+    #sql = ''' INSERT INTO seating (row,seat,name) VALUES (? , ? ,? );'''
     cur = conn.cursor()
     cur.execute(sql, seating)
 
@@ -216,7 +225,7 @@ def single_seat_allocation(passenger_name, no_of_passenger):
                 print("Seat Allocated to ", passenger_name, " is ", seat)
                 conn = create_connection(db)
                 with conn:
-                    update_seats(conn, (row_number, seat_number, passenger_name))
+                    update_seats(conn, (passenger_name,row_number, seat_number))
                 return i, j
 
 
@@ -253,7 +262,7 @@ def group_seat_allot(passenger_name, no_of_passenger):
         print("Seat Allocated to ", passenger_name, " is ", seat)
         conn = create_connection(db)
         with conn:
-           update_seats(conn, (row_number, seat_number, passenger_name))
+            update_seats(conn, (passenger_name, row_number, seat_number))
     return seat_allocated, row
 
 
@@ -318,7 +327,7 @@ def _main_():
                         passenger_seated_away += 1.0
 
         elif total_available_seats(empty_seat_row) == 0:
-            print("Flight is Fully Booked, Sorry ", passenger_name)
+            print("Flight is Fully Booked ", passenger_name)
             passenger_refused += no_of_passenger
 
         elif seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) < no_of_passenger:
@@ -334,5 +343,10 @@ def _main_():
     conn = create_connection(db)
     with conn:
         update_metrics(conn, (passenger_refused, passenger_seated_away))
+
+
+nrows, seat_config, seat_col = read_seat_config()
+total_booking = read_rows_in_booking()
+seats = generate_seat_map()
 empty_seat_row = create_seat_tracker()
 _main_()
