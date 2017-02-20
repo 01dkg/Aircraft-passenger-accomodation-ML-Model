@@ -20,8 +20,8 @@ import numpy as np
 #                                         Functions Reading Values from Files and DB                                  #
 #                                                                                                                     #
 #######################################################################################################################
-#db = sys.argv[1]
-#filename = sys.argv[2]
+#db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
+#filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
 db = 'airline_seating.db'
 filename = 'bookings.csv'
 
@@ -30,9 +30,9 @@ filename = 'bookings.csv'
 
 
 def read_seat_config():
-    conn = sqlite3.connect(db)
+    conn = sqlite3.connect(db)                                                               #Connecting to the database
     cur = conn.cursor()
-    row_data = cur.execute('''SELECT * FROM rows_cols''')
+    row_data = cur.execute('''SELECT * FROM rows_cols''')               #Reading nrows, seat_config from rows_cols table
     for row in row_data:
         nrows = row[0]
         seat_config = row[1]
@@ -41,15 +41,15 @@ def read_seat_config():
     return nrows, seat_config, seat_col
 
 
-def read_rows_in_booking(filename):
+def read_rows_in_booking(filename):                          #Function calculating the number of record in booking file
     df = pd.read_csv(filename, header=None)
     return len(df)
 
 def read_booking(n):
     column_names = ['passenger_name, no_of_passenger']
     df = pd.read_csv(filename, header=None)
-    passenger_name = df.loc[n, 0]  # Setting Index to 1 as index starts from 0
-    no_of_passenger = df.loc[n, 1]
+    passenger_name = df.loc[n, 0]                                             #Setting Index to 1 as index starts from 0
+    no_of_passenger = df.loc[n, 1]             #Reading passenger name and no. of passenger from booking file one by one
     return passenger_name, no_of_passenger
 
 
@@ -349,8 +349,8 @@ def _main_():
         else:
             print("System Error")
             exit(0)
-    print("Passenger Refused So Far", passenger_refused)
-    print("Passenger Seated Away", passenger_seated_away)
+    print("Passenger Refused So Far", passenger_refused)    #Total no. of Passenger Refused checkin
+    print("Passenger Seated Away", passenger_seated_away)   #Total no. of Passenger seating away from their group
     conn = create_connection(db)
     with conn:                              #updating count of passenger refused and seated away in metrics table
         update_metrics(conn, (passenger_refused, passenger_seated_away))
