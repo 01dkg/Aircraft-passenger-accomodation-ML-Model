@@ -300,6 +300,7 @@ def _main_():
     passenger_seated_away = 0
 
     for n in range(total_booking):
+        print("Nnonzero", np.count_nonzero(seats[1], axis=0))
         passenger_name, no_of_passenger = read_booking(n)
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
