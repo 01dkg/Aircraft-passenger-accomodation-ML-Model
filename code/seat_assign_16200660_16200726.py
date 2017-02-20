@@ -53,10 +53,20 @@ def read_booking(n):
     return passenger_name, no_of_passenger
 
 
-# Seat Matrix
-# 0 is empty, 1 is occupied
 
 
+######################################################################################################################
+#                                                                                                                    #
+#                                         Seat Map - Controlling Seats and Booking                                   #
+#                                         ----------------------------------------                                   #
+#  Description: This function read the seating configuration of a aircraft from database file, based on which this   #
+#               generate seat map i.e creating numpy matrix of given nrow and seat_config                            #
+#                                                                                                                    #
+#  Values: 0 is empty seat and 1 is occupied seat                                                                    #
+#                                                                                                                    #
+#  Example: For trained data, we have nrows := 15 & seat_config ='ACDF', by using numpy we have created matrix of    #
+#            15 rows x 4 cols, and assigned 0 as default value.                                                      #
+#######################################################################################################################
 
 def generate_seat_map():
     nrows, seat_config, seat_col = read_seat_config()
