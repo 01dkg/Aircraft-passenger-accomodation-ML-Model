@@ -11,10 +11,21 @@
 
 # Run this code G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
 import sys
+import unittest
 import sqlite3
 import pandas as pd
 import numpy as np
 
+
+class test_initial_total_seats(unittest.TestCase):
+
+      def test_total_available_seats(self):
+        seats_available= total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available,60)
+
+      def test_total_available_seats2(self):
+        seats_available = total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available, 10)
 ######################################################################################################################
 #                                                                                                                     #
 #                                         Functions Reading Values from Files and DB                                  #
@@ -24,6 +35,8 @@ import numpy as np
 #filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
 db = 'airline_seating.db'
 filename = 'bookings.csv'
+
+
 
 #This function read nrows and seat_config from rows_cols table in Database
 # seat_col storing the columns in aircraft seat map by calculating length of seat_config variable
@@ -45,7 +58,7 @@ def read_rows_in_booking(filename):                          #Function calculati
     df = pd.read_csv(filename, header=None)
     return len(df)
 
-def read_booking(n):
+def read_booking(n,filename):
     column_names = ['passenger_name, no_of_passenger']
     df = pd.read_csv(filename, header=None)
     passenger_name = df.loc[n, 0]                                             #Setting Index to 1 as index starts from 0
@@ -94,7 +107,7 @@ def check_overbooking():
     nrows, seat_config, seat_col = read_seat_config()
     passenger_total = 0
     for i in range(nrows):
-        passenger_name, no_of_passenger = read_booking(i)
+        passenger_name, no_of_passenger = read_booking(i,filename)
         passenger_total += no_of_passenger
     if passenger_total > (seat_col * nrows):
         print("Cannot Proceed: No. of Passenger can't be more than no. of available seats")
@@ -148,8 +161,8 @@ def update_seat_tracker(empty_seat_row, row):
 
 
 def total_available_seats(empty_seat_row):
-    sum(empty_seat_row)
-    return sum(empty_seat_row)
+    total_seats= sum(empty_seat_row)
+    return total_seats
 
 
 #######################################################################################################################
@@ -304,13 +317,13 @@ def group_seat_allot_case3(passenger_name, no_of_passenger):
 #                                         Main Function Call and Body                                                 #
 #                                                                                                                     #
 #######################################################################################################################
-def _main_():
+def __main__():
 
     passenger_refused = 0.0
     passenger_seated_away = 0
     for n in range(total_booking):
 
-        passenger_name, no_of_passenger = read_booking(n)
+        passenger_name, no_of_passenger = read_booking(n,filename)
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
             if no_of_passenger == 1:
@@ -360,4 +373,15 @@ nrows, seat_config, seat_col = read_seat_config()
 total_booking = read_rows_in_booking(filename)
 seats = generate_seat_map()
 empty_seat_row = create_seat_tracker()
-_main_()
+
+
+class test_after_total_seats(unittest.TestCase):
+    def test_total_available_seats(self):
+        seats_available = total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available, 60)
+
+    def test_total_available_seats2(self):
+        seats_available = total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available, 10)
+if __name__ == '__main__':
+    unittest.main()
