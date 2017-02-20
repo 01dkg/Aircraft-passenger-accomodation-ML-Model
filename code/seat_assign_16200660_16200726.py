@@ -20,9 +20,10 @@ import numpy as np
 #                                         Functions Reading Values from Files and DB                                  #
 #                                                                                                                     #
 #######################################################################################################################
-db = sys.argv[1]
-filename = sys.argv[2]
-
+#db = sys.argv[1]
+#filename = sys.argv[2]
+db = 'airline_seating.db'
+filename = 'bookings.csv'
 
 #This function read nrows and seat_config from rows_cols table in Database
 # seat_col storing the columns in aircraft seat map by calculating length of seat_config variable
@@ -40,7 +41,7 @@ def read_seat_config():
     return nrows, seat_config, seat_col
 
 
-def read_rows_in_booking():
+def read_rows_in_booking(filename):
     df = pd.read_csv(filename, header=None)
     return len(df)
 
@@ -109,7 +110,7 @@ def seats_not_full(empty_seat_row):
 
 
 def valid_nrows_seat_config(nrows,seat_config):
-    if nrows <=0 or isinstance(nrows,str) or isinstance(seat_config,int):
+    if isinstance(nrows,str) or isinstance(seat_config,int):
         print("Cannot Proceed: Invalid value of nrows or seat_config")
         exit(1)
 
@@ -346,7 +347,7 @@ def _main_():
 
 
 nrows, seat_config, seat_col = read_seat_config()
-total_booking = read_rows_in_booking()
+total_booking = read_rows_in_booking(filename)
 seats = generate_seat_map()
 empty_seat_row = create_seat_tracker()
 _main_()
