@@ -352,7 +352,7 @@ def _main_():
     print("Passenger Refused So Far", passenger_refused)
     print("Passenger Seated Away", passenger_seated_away)
     conn = create_connection(db)
-    with conn:
+    with conn:                              #updating count of passenger refused and seated away in metrics table
         update_metrics(conn, (passenger_refused, passenger_seated_away))
 
 
