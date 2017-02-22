@@ -61,10 +61,20 @@ def read_rows_in_booking(filename):                          #Function calculati
 def read_booking(n,filename):
     column_names = ['passenger_name, no_of_passenger']
     df = pd.read_csv(filename, header=None)
-    passenger_name = df.loc[n, 0]                                             #Setting Index to 1 as index starts from 0
-    no_of_passenger = df.loc[n, 1]             #Reading passenger name and no. of passenger from booking file one by one
+    passenger_name = df.loc[n, 0]
+    no_of_passenger = df.loc[n, 1]
     return passenger_name, no_of_passenger
 
+class read_booking(object):
+    def __init__(self,n,filename):
+        self.n =n
+        self.filename = filename
+
+    def read(self):
+        df = pd.read_csv(filename,header=None)
+        self.passenger_name =df.loc[self.n,0]                                 #Setting Index to 1 as index starts from 0
+        self.no_of_passenger=df.loc[self.n,1]  #Reading passenger name and no. of passenger from booking file one by one
+        return self.passenger_name, self.no_of_passenger
 
 
 
@@ -107,7 +117,7 @@ def check_overbooking():
     nrows, seat_config, seat_col = read_seat_config()
     passenger_total = 0
     for i in range(nrows):
-        passenger_name, no_of_passenger = read_booking(i,filename)
+        passenger_name, no_of_passenger = read_booking.read(i,filename)
         passenger_total += no_of_passenger
     if passenger_total > (seat_col * nrows):
         print("Cannot Proceed: No. of Passenger can't be more than no. of available seats")
@@ -322,8 +332,9 @@ def __main__():
     passenger_refused = 0.0
     passenger_seated_away = 0
     for n in range(total_booking):
-
-        passenger_name, no_of_passenger = read_booking(n,filename)
+        abc = read_booking(n,filename)
+        passenger_name,no_of_passenger = abc.read()
+        #passenger_name, no_of_passenger = read_booking(n,filename)
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
             if no_of_passenger == 1:
