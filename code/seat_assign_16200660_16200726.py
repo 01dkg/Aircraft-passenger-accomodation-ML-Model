@@ -15,7 +15,7 @@ import unittest
 import sqlite3
 import pandas as pd
 import numpy as np
-
+import pprint as pp
 
 class test_initial_total_seats(unittest.TestCase):
 
@@ -367,7 +367,7 @@ def __main__():
     conn = create_connection(db)
     with conn:                              #updating count of passenger refused and seated away in metrics table
         update_metrics(conn, (passenger_refused, passenger_seated_away))
-
+    print(seats)
 
 nrows, seat_config, seat_col = read_seat_config()
 total_booking = read_rows_in_booking(filename)
@@ -384,4 +384,5 @@ class test_after_total_seats(unittest.TestCase):
         seats_available = total_available_seats(empty_seat_row)
         self.assertEqual(seats_available, 10)
 if __name__ == '__main__':
+    __main__()
     unittest.main()
