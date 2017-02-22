@@ -15,7 +15,7 @@ import unittest
 import sqlite3
 import pandas as pd
 import numpy as np
-import pprint as pp
+import pprint
 
 class test_initial_total_seats(unittest.TestCase):
 
@@ -95,7 +95,9 @@ def generate_seat_map():
     nrows, seat_config, seat_col = read_seat_config()
     valid_nrows_seat_config(nrows, seat_config)
     seats = np.zeros(shape=(nrows, seat_col))
-    return seats
+    seats_name = np.chararray(shape=(nrows, seat_col),itemsize=15)
+    seats_name[:] = 'abc'
+    return seats,seats_name
 
 
 
@@ -254,6 +256,7 @@ def single_seat_allocation(passenger_name, no_of_passenger):
         for j in range(seat_col):
             if seats[i][j] == 0.0:
                 seats[i][j] = 1.0
+                seats_name[i][j] = passenger_name
                 update_seat_tracker(empty_seat_row, i)
                 seat, row_number, seat_number = seats_encoder(i, j)
                 print("Seat Allocated to ", passenger_name, " is ", seat)
@@ -269,42 +272,52 @@ def single_seat_allocation(passenger_name, no_of_passenger):
 #                           no_of_passenger > 1 or no_of_passenger <= seat_col                                        #
 #                                                                                                                     #
 #######################################################################################################################
-def group_seat_available_row(passenger_name, no_of_passenger):
-    for i in range(nrows):
-        if empty_seat_row[i] >= no_of_passenger:
-            return i
+class group_seat_allocation(object):
 
+    def __init__(self,passenger_name,no_of_passenger):
+        self.passenger_name = passenger_name
+        self.no_of_passenger = no_of_passenger
 
-def group_seat_check(passenger_name, no_of_passenger):
-    row = group_seat_available_row(passenger_name, no_of_passenger)
-    temp = []
-    for j in range(seat_col):
-        if seats[row][j] == 0:
-            temp.append(j)
-    return temp, row
+    def group_seat_available_row(self):
+        for i in range(nrows):
+            if empty_seat_row[i] >= self.no_of_passenger:
+                return i
 
+    def group_seat_check(self):
 
-def group_seat_allot(passenger_name, no_of_passenger):
-    temp, row = group_seat_check(passenger_name, no_of_passenger)
-    seat_allocated = []
-    for i in range(no_of_passenger):
-        col = temp[i]
-        seat_allocated.append(col)
-        seats[row][col] = 1
-        update_seat_tracker(empty_seat_row, row)
-        seat, row_number, seat_number = seats_encoder(row, col)
-        print("Seat Allocated to ", passenger_name, " is ", seat)
-        conn = create_connection(db)
-        with conn:
-            update_seats(conn, (passenger_name, row_number, seat_number))
-    return seat_allocated, row
+        row = group_seat_allocation.group_seat_available_row(self)
+        temp = []
+        for j in range(seat_col):
+            if seats[row][j] == 0:
+                temp.append(j)
+        return temp, row
 
+    def is_seats_in_a_row(self):
+            for i in range(nrows):
+                if empty_seat_row[i] >= self.no_of_passenger:
+                    return True
 
-def is_seats_in_a_row(no_of_passenger):
-    for i in range(nrows):
-        if empty_seat_row[i] >= no_of_passenger:
-            return True
+class group_seat_allocation_case(object):
 
+    def __init__(self,passenger_name,no_of_passenger):
+        self.passenger_name = passenger_name
+        self.no_of_passenger = no_of_passenger
+
+    def group_seat_allot(self):
+        temp, row = group_seat_allocation.group_seat_check(self)
+        seat_allocated = []
+        for i in range(self.no_of_passenger):
+            col = temp[i]
+            seat_allocated.append(col)
+            seats[row][col] = 1
+            seats_name[row][col]= self.passenger_name
+            update_seat_tracker(empty_seat_row, row)
+            seat, row_number, seat_number = seats_encoder(row, col)
+            print("Seat Allocated to ", self.passenger_name, " is ", seat)
+            conn = create_connection(db)
+            with conn:
+                update_seats(conn, (self.passenger_name, row_number, seat_number))
+        return seat_allocated, row
 
 #######################################################################################################################
 #                                                                                                                     #
@@ -318,8 +331,8 @@ def group_seat_allot_case3(passenger_name, no_of_passenger):
     no_of_rows = no_of_passenger // seat_col
     remaining_seats = no_of_passenger % seat_col
     for i in range(no_of_rows):
-        group_seat_allot(passenger_name, 4)
-    group_seat_allot(passenger_name, remaining_seats)
+        group_seat_allocation_case.group_seat_allot(passenger_name, 4)
+        group_seat_allocation_case.group_seat_allot(passenger_name, remaining_seats)
 
 
 #######################################################################################################################
@@ -332,20 +345,20 @@ def __main__():
     passenger_refused = 0.0
     passenger_seated_away = 0
     for n in range(total_booking):
-        abc = read_booking(n,filename)
-        passenger_name,no_of_passenger = abc.read()
+        readBookingObj = read_booking(n,filename)
+        passenger_name,no_of_passenger = readBookingObj.read()
         #passenger_name, no_of_passenger = read_booking(n,filename)
+        gsaObj= group_seat_allocation(passenger_name,no_of_passenger)
+        gsacObj = group_seat_allocation_case(passenger_name,no_of_passenger)
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
             if no_of_passenger == 1:
                 i, j = single_seat_allocation(passenger_name, no_of_passenger)
-
             elif no_of_passenger > 1 and no_of_passenger <= seat_col:
-
-                Flag = is_seats_in_a_row(no_of_passenger)
+                Flag = gsaObj.is_seats_in_a_row()
                 if total_available_seats(empty_seat_row) > no_of_passenger and Flag == True:
                     # And each row has only 1 seat then allocate separately
-                    group_seat_allot(passenger_name, no_of_passenger)
+                    gsacObj.group_seat_allot()
 
                 elif total_available_seats(empty_seat_row) >= no_of_passenger:
                     for i in range(no_of_passenger):
@@ -378,11 +391,13 @@ def __main__():
     conn = create_connection(db)
     with conn:                              #updating count of passenger refused and seated away in metrics table
         update_metrics(conn, (passenger_refused, passenger_seated_away))
-    print(seats)
+    print("Seat Map of Fully Booked Plan is")
+    for i in range(nrows):
+        print("Row",i,str(seats_name[i]))
 
 nrows, seat_config, seat_col = read_seat_config()
 total_booking = read_rows_in_booking(filename)
-seats = generate_seat_map()
+seats,seats_name = generate_seat_map()
 empty_seat_row = create_seat_tracker()
 
 
