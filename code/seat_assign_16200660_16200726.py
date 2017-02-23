@@ -256,7 +256,7 @@ def single_seat_allocation(passenger_name, no_of_passenger):
         for j in range(seat_col):
             if seats[i][j] == 0.0:
                 seats[i][j] = 1.0
-                seats_name[i][j] = passenger_name
+                seats_name[i][j] = passenger_name.split(" ")[0]
                 update_seat_tracker(empty_seat_row, i)
                 seat, row_number, seat_number = seats_encoder(i, j)
                 print("Seat Allocated to ", passenger_name, " is ", seat)
@@ -310,7 +310,7 @@ class group_seat_allocation_case(object):
             col = temp[i]
             seat_allocated.append(col)
             seats[row][col] = 1
-            seats_name[row][col]= self.passenger_name
+            seats_name[row][col]= self.passenger_name.split(" ")[0]
             update_seat_tracker(empty_seat_row, row)
             seat, row_number, seat_number = seats_encoder(row, col)
             print("Seat Allocated to ", self.passenger_name, " is ", seat)
@@ -393,8 +393,9 @@ def __main__():
         update_metrics(conn, (passenger_refused, passenger_seated_away))
     print("Seat Map of Fully Booked Plan is")
     for i in range(nrows):
-        print("Row",i,str(seats_name[i]))
-
+        rows= seats_name[i].center(10,fillchar=' ').decode("utf-8")
+        row_no= str(i + 1)
+        print(row_no,rows)
 nrows, seat_config, seat_col = read_seat_config()
 total_booking = read_rows_in_booking(filename)
 seats,seats_name = generate_seat_map()
