@@ -35,8 +35,8 @@ class test_initial_total_seats(unittest.TestCase):
 #######################################################################################################################
 #db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
 #filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
-db = 'test.db'
-filename = 'test_bookings.csv'
+db = 'airline_seating.db'
+filename = 'bookings.csv'
 
 
 
@@ -275,41 +275,46 @@ class single_seat(object):
 #                           no_of_passenger > 1 or no_of_passenger <= seat_col                                        #
 #                                                                                                                     #
 #######################################################################################################################
-def group_seat_available_row(passenger_name, no_of_passenger):
-    for i in range(nrows):
-        if empty_seat_row[i] >= no_of_passenger:
-            return i
+class group_seat_case_two(object):
+
+    def __init__(self,passenger_name,no_of_passenger):
+        self.passenger_name = passenger_name
+        self.no_of_passenger = no_of_passenger
 
 
-def group_seat_check(passenger_name, no_of_passenger):
-    row = group_seat_available_row(passenger_name, no_of_passenger)
-    temp = []
-    for j in range(seat_col):
-        if seats[row][j] == 0:
-            temp.append(j)
-    return temp, row
+    def group_seat_available_row(self):
+        for i in range(nrows):
+            if empty_seat_row[i] >= self.no_of_passenger:
+                return i
+
+    def group_seat_check(self):
+        row = self.group_seat_available_row()
+        temp = []
+        for j in range(seat_col):
+            if seats[row][j] == 0:
+                temp.append(j)
+        return temp, row
 
 
-def group_seat_allot(passenger_name, no_of_passenger):
-    temp, row = group_seat_check(passenger_name, no_of_passenger)
-    seat_allocated = []
-    for i in range(no_of_passenger):
-        col = temp[i]
-        seat_allocated.append(col)
-        seats[row][col] = 1
-        seats_name[row][col] = passenger_name.split(" ")[0]
-        update_seat_tracker(empty_seat_row, row)
-        seat, row_number, seat_number = seats_encoder(row, col)
-        conn = create_connection(db)
-        with conn:
-            update_seats(conn, (passenger_name, row_number, seat_number))
-    return seat_allocated, row
+    def group_seat_allot(self):
+        temp, row = self.group_seat_check()
+        seat_allocated = []
+        for i in range(self.no_of_passenger):
+            col = temp[i]
+            seat_allocated.append(col)
+            seats[row][col] = 1
+            seats_name[row][col] = self.passenger_name.split(" ")[0]
+            update_seat_tracker(empty_seat_row, row)
+            seat, row_number, seat_number = seats_encoder(row, col)
+            conn = create_connection(db)
+            with conn:
+                update_seats(conn, (self.passenger_name, row_number, seat_number))
+        return seat_allocated, row
 
-
-def is_seats_in_a_row(no_of_passenger):
-    for i in range(nrows):
-        if empty_seat_row[i] >= no_of_passenger:
-            return True
+    def is_seats_in_a_row(self):
+        for i in range(nrows):
+            if empty_seat_row[i] >= self.no_of_passenger:
+                return True
 
 
 #######################################################################################################################
@@ -327,9 +332,10 @@ class group_seat_case_three(object):
     def group_seat_allot_case3(self):
         no_of_rows = self.no_of_passenger // seat_col
         remaining_seats = self.no_of_passenger % seat_col
+        grouptwoObj = group_seat_case_two(self)
         for i in range(no_of_rows):
-            group_seat_allot(self.passenger_name, seat_col)
-        group_seat_allot(self.passenger_name, remaining_seats)
+            grouptwoObj.group_seat_allot(self.passenger_name, seat_col)
+        grouptwoObj.group_seat_allot(self.passenger_name, remaining_seats)
 
 
 #######################################################################################################################
@@ -345,7 +351,9 @@ def __main__():
         readBookingObj = read_booking(n, filename)
         passenger_name, no_of_passenger = readBookingObj.read()
         single_seatObj = single_seat(passenger_name,no_of_passenger)
+        gsctwoObj= group_seat_case_two(passenger_name,no_of_passenger)
         group_seat_case_threeObj= group_seat_case_three(passenger_name,no_of_passenger)
+
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
             if no_of_passenger == 1:
@@ -353,10 +361,10 @@ def __main__():
 
             elif no_of_passenger > 1 and no_of_passenger <= seat_col:
 
-                Flag = is_seats_in_a_row(no_of_passenger)
+                Flag = gsctwoObj.is_seats_in_a_row()
                 if total_available_seats(empty_seat_row) > no_of_passenger and Flag == True:
                     # And each row has only 1 seat then allocate separately
-                    group_seat_allot(passenger_name, no_of_passenger)
+                    gsctwoObj.group_seat_allot()
 
                 elif total_available_seats(empty_seat_row) >= no_of_passenger:
                     for i in range(no_of_passenger):
