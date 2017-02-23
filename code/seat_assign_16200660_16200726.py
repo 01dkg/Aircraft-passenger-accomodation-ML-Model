@@ -196,13 +196,17 @@ def update_seats(conn, seating):
     :param task:
     :return: project id
     """
-    sql = ''' UPDATE seating
-               SET name = ?
-               WHERE row = ? AND seat = ?'''
+    #sql = ''' UPDATE seating
+    #           SET name = ?
+    #           WHERE row = ? AND seat = ?'''
 
-    #sql = ''' INSERT INTO seating (row,seat,name) VALUES (? , ? ,? );'''
+    sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
     cur = conn.cursor()
-    cur.execute(sql, seating)
+    try:
+        cur.execute(sql, seating)
+        print(seating[0], "seat ->", str(seating[1])+seating[2])
+    except sqlite3.IntegrityError:
+        print("Database Error: Seat already checked in by some Passenger")
 
 
 def update_metrics(conn, metrics):
@@ -249,7 +253,6 @@ def single_seat_allocation(passenger_name, no_of_passenger):
                 seats_name[i][j] = passenger_name.split(" ")[0]
                 update_seat_tracker(empty_seat_row, i)
                 seat, row_number, seat_number = seats_encoder(i, j)
-                print("Seat Allocated to ", passenger_name, " is ", seat)
                 conn = create_connection(db)
                 with conn:
                     update_seats(conn, (passenger_name,row_number, seat_number))
@@ -287,7 +290,6 @@ def group_seat_allot(passenger_name, no_of_passenger):
         seats_name[row][col] = passenger_name.split(" ")[0]
         update_seat_tracker(empty_seat_row, row)
         seat, row_number, seat_number = seats_encoder(row, col)
-        print("Seat Allocated to ", passenger_name, " is ", seat)
         conn = create_connection(db)
         with conn:
             update_seats(conn, (passenger_name, row_number, seat_number))
