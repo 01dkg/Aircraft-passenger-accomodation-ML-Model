@@ -45,8 +45,11 @@ def read_seat_config():
 
 
 def read_rows_in_booking(filename):                          #Function calculating the number of record in booking file
-    df = pd.read_csv(filename, header=None)
-    return len(df)
+    try:
+        df = pd.read_csv(filename, header=None)
+        return len(df)
+    except pd.io.common.EmptyDataError:
+        print("Empty File")
 
 class read_booking(object):
     def __init__(self,n,filename):
@@ -132,9 +135,21 @@ def valid_nrows_seat_config(nrows,seat_config):
         print("Cannot Proceed: Invalid value of nrows or seat_config")
         exit(1)
 
+def check_empty_file(filename):
+    try:
+        df = pd.read_csv(filename, header=None)
+        if len(df) ==0:
+            print("Empty File")
+            exit(0)
+    except pd.io.common.EmptyDataError:
+        print("Empty File")
+
 def call_validity_functions(passenger_name,no_of_passenger):
-    is_empty_booking_list(passenger_name, no_of_passenger)
-    is_no_of_passenger_invalid_entry(no_of_passenger)
+    try:
+        is_empty_booking_list(passenger_name, no_of_passenger)
+        is_no_of_passenger_invalid_entry(no_of_passenger)
+    except Exception:
+        print("Empty File")
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Tracker Functions                                                      #
@@ -146,18 +161,18 @@ def create_seat_tracker():
     empty_seat_row = []
     for i in range(nrows):
         empty_seat_row.append(seat_col)
-    return empty_seat_row
+    return empty_seat_row                                                #A list to keep a track of empty seats in a row
 
 
 def update_seat_tracker(empty_seat_row, row):
     val = empty_seat_row[row]
     empty_seat_row[row] = val - 1
-    return empty_seat_row
+    return empty_seat_row                       #Updating seat tracker list whenever a seat is confirmed to a passenger
 
 
 def total_available_seats(empty_seat_row):
     total_seats= sum(empty_seat_row)
-    return total_seats
+    return total_seats                                          #Returning total empty seats in the aircraft at a time
 
 
 #######################################################################################################################
@@ -336,12 +351,14 @@ def __main__(db,filename):
 
     passenger_refused = 0.0
     passenger_seated_away = 0
+    check_empty_file(filename)
     total_booking = read_rows_in_booking(filename)
     for n in range(total_booking):
         readBookingObj = read_booking(n, filename)
         passenger_name, no_of_passenger = readBookingObj.read()
         single_seatObj = single_seat(passenger_name,no_of_passenger)
         gsctwoObj= groupSeatCaseTwo(passenger_name,no_of_passenger)
+        call_validity_functions(passenger_name,no_of_passenger)
         group_seat_case_threeObj= group_seat_case_three(passenger_name,no_of_passenger)
 
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
