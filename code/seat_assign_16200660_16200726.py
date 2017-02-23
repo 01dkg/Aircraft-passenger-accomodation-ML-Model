@@ -388,7 +388,7 @@ def __main__(db,filename):
     conn = create_connection(db)
     with conn:                                     #updating count of passenger refused and seated away in metrics table
         update_metrics(conn, (passenger_refused, passenger_seated_away))
-    print("Seat Map of Fully Booked Plan is")
+    print("-----------------------Seat Map of Fully Booked Plan is -----------------------")
     for i in range(nrows):
         try:
             rows = seats_name[i].center(10, fillchar=' ').decode("utf-8")
@@ -418,14 +418,25 @@ class test_after_total_seats(unittest.TestCase):
         passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
         self.assertEqual(passenger_refused,180)
 
+    def test_passenger_refused2(self):
+        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
+        self.assertEqual(passenger_refused,180)
+
+    def test_read_seat_config(self):
+        nrows, seat_config, seat_col = read_seat_config()
+        self.assertEqual(nrows,15,msg="Reading Correct Rows")
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         db = sys.argv[1]
         filename = sys.argv[2]
         __main__(db,filename)
+
+        print("-------------------Testing Data-------------------")
         suite = unittest.TestSuite()
         suite.addTest(test_after_total_seats("test_total_available_seats",db,filename))
         suite.addTest(test_after_total_seats("test_passenger_refused",db,filename))
+        suite.addTest(test_after_total_seats("test_passenger_refused2", 'test.db','test_bookings.csv'))
+        suite.addTest(test_after_total_seats("test_read_seat_config", db, filename))
         unittest.TextTestRunner().run(suite)
     else:
         print("Enter valid *.db and *.csv filenames.")
