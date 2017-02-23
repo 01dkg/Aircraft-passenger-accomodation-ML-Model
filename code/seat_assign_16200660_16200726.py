@@ -354,21 +354,23 @@ def __main__():
 
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
+            #Case 1 calling starts here
             if no_of_passenger == 1:
                 i, j = single_seatObj.single_seat_allocation()
 
+            #Case 2 calling starts here
             elif no_of_passenger > 1 and no_of_passenger <= seat_col:
-
                 Flag = gsctwoObj.is_seats_in_a_row()
+
                 if total_available_seats(empty_seat_row) > no_of_passenger and Flag == True:
                     # And each row has only 1 seat then allocate separately
                     gsctwoObj.group_seat_allot()
-
                 elif total_available_seats(empty_seat_row) >= no_of_passenger:
                     for i in range(no_of_passenger):
                         single_seatObj.single_seat_allocation()
                         passenger_seated_away += 1.0
 
+            #Case 3 calling starts here
             elif no_of_passenger > seat_col:
 
                 if total_available_seats(empty_seat_row) > no_of_passenger:
@@ -390,10 +392,10 @@ def __main__():
         else:
             print("System Error")
             exit(0)
-    print("Passenger Refused So Far", passenger_refused)    #Total no. of Passenger Refused checkin
-    print("Passenger Seated Away", passenger_seated_away)   #Total no. of Passenger seating away from their group
+    print("Passenger Refused So Far", passenger_refused)                        #Total no. of Passenger Refused checkin
+    print("Passenger Seated Away", passenger_seated_away)          #Total no. of Passenger seating away from their group
     conn = create_connection(db)
-    with conn:                              #updating count of passenger refused and seated away in metrics table
+    with conn:                                     #updating count of passenger refused and seated away in metrics table
         update_metrics(conn, (passenger_refused, passenger_seated_away))
     print("Seat Map of Fully Booked Plan is")
     for i in range(nrows):
