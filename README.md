@@ -1,10 +1,24 @@
-# MIS40750 Analytics Research & Implementation
+<div style="text-align:center"><img src="ucd_smurfit_logo.jpg" width="300" height="100"/></div>
 
-### Programming Assignment
+## <center> UCD Analytics Research & Implementation MIS40750 </center>
 
-# Submiited by:
-* Gupta, Deepak Kuumar (16200660)
-* Goyal, Shruti (16200726)
+### <center> Programming Assignment </center>
+
+#### <center> Submission Date : 24th Feb, 2017 </center>
+#### <center> MSc Buiness Anaytics - Full Time </center>
+### Authors :
+|Name  | Student Number |
+|:------:|:--------------:|
+|Deepak Kumar Gupta| 16200660|
+|Shruti Goyal      | 16200726|
+
+### Statement of Authorship
+“We declare that all of the undersigned have contributed to this work and
+that it is all our own work as understood by UCD policies on Academic
+Integrity and Plagiarism, unless otherwise cited”.
+
+1. **Signature:**
+
 
 # Functions List:
 
