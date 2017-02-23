@@ -402,7 +402,11 @@ nrows, seat_config, seat_col = read_seat_config()
 seats,seats_name = generate_seat_map()
 empty_seat_row = create_seat_tracker()
 
-
+#######################################################################################################################
+#                                                                                                                     #
+#                                         Unit Testing Class and Functions                                            #
+#                                                                                                                     #
+#######################################################################################################################
 class test_after_total_seats(unittest.TestCase):
 
     def __init__(self,testname, db, filename):
@@ -425,6 +429,7 @@ class test_after_total_seats(unittest.TestCase):
     def test_read_seat_config(self):
         nrows, seat_config, seat_col = read_seat_config()
         self.assertEqual(nrows,15,msg="Reading Correct Rows")
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         db = sys.argv[1]
