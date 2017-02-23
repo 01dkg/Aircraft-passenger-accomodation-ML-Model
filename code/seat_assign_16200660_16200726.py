@@ -19,22 +19,12 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-class test_initial_total_seats(unittest.TestCase):
-
-      def test_total_available_seats(self):
-        seats_available= total_available_seats(empty_seat_row)
-        self.assertEqual(seats_available,60)
-
-      def test_total_available_seats2(self):
-        seats_available = total_available_seats(empty_seat_row)
-        self.assertEqual(seats_available, 10)
 ######################################################################################################################
 #                                                                                                                     #
 #                                         Functions Reading Values from Files and DB                                  #
 #                                                                                                                     #
 #######################################################################################################################
-#db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
-#filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
+                                        #Acceting booking csv file name as second system argument
 db = 'airline_seating.db'
 filename = 'bookings.csv'
 
@@ -341,10 +331,11 @@ class group_seat_case_three(object):
 #                                         Main Function Call and Body                                                 #
 #                                                                                                                     #
 #######################################################################################################################
-def __main__():
+def __main__(db,filename):
 
     passenger_refused = 0.0
     passenger_seated_away = 0
+    total_booking = read_rows_in_booking(filename)
     for n in range(total_booking):
         readBookingObj = read_booking(n, filename)
         passenger_name, no_of_passenger = readBookingObj.read()
@@ -408,20 +399,33 @@ def __main__():
     return passenger_seated_away, passenger_refused
 
 nrows, seat_config, seat_col = read_seat_config()
-total_booking = read_rows_in_booking(filename)
 seats,seats_name = generate_seat_map()
 empty_seat_row = create_seat_tracker()
 
+
 class test_after_total_seats(unittest.TestCase):
+
+    def __init__(self,testname, db, filename):
+        super(test_after_total_seats, self).__init__(testname)
+        self.db = db
+        self.filename = filename
+
     def test_total_available_seats(self):
         seats_available = total_available_seats(empty_seat_row)
-        self.assertEqual(seats_available,60)
+        self.assertEqual(seats_available,0)
 
     def test_passenger_refused(self):
-        passenger_seated_away ,passenger_refused= __main__()
-        self.assertEqual(passenger_refused,120)
-        self.assertEqual(passenger_seated_away, 2)
+        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
+        self.assertEqual(passenger_refused,180)
 
 if __name__ == '__main__':
-    __main__
-    unittest.main()
+    if len(sys.argv) > 1:
+        db = sys.argv[1]
+        filename = sys.argv[2]
+        __main__(db,filename)
+        suite = unittest.TestSuite()
+        suite.addTest(test_after_total_seats("test_total_available_seats",db,filename))
+        suite.addTest(test_after_total_seats("test_passenger_refused",db,filename))
+        unittest.TextTestRunner().run(suite)
+    else:
+        print("Enter valid *.db and *.csv filenames.")
