@@ -275,12 +275,11 @@ class single_seat(object):
 #                           no_of_passenger > 1 or no_of_passenger <= seat_col                                        #
 #                                                                                                                     #
 #######################################################################################################################
-class group_seat_case_two(object):
+class groupSeatCaseTwo(object):
 
     def __init__(self,passenger_name,no_of_passenger):
         self.passenger_name = passenger_name
         self.no_of_passenger = no_of_passenger
-
 
     def group_seat_available_row(self):
         for i in range(nrows):
@@ -294,7 +293,6 @@ class group_seat_case_two(object):
             if seats[row][j] == 0:
                 temp.append(j)
         return temp, row
-
 
     def group_seat_allot(self):
         temp, row = self.group_seat_check()
@@ -332,7 +330,7 @@ class group_seat_case_three(object):
     def group_seat_allot_case3(self):
         no_of_rows = self.no_of_passenger // seat_col
         remaining_seats = self.no_of_passenger % seat_col
-        grouptwoObj = group_seat_case_two(self)
+        grouptwoObj = groupSeatCaseTwo(self)
         for i in range(no_of_rows):
             grouptwoObj.group_seat_allot(self.passenger_name, seat_col)
         grouptwoObj.group_seat_allot(self.passenger_name, remaining_seats)
@@ -351,7 +349,7 @@ def __main__():
         readBookingObj = read_booking(n, filename)
         passenger_name, no_of_passenger = readBookingObj.read()
         single_seatObj = single_seat(passenger_name,no_of_passenger)
-        gsctwoObj= group_seat_case_two(passenger_name,no_of_passenger)
+        gsctwoObj= groupSeatCaseTwo(passenger_name,no_of_passenger)
         group_seat_case_threeObj= group_seat_case_three(passenger_name,no_of_passenger)
 
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
@@ -409,7 +407,7 @@ def __main__():
 
 nrows, seat_config, seat_col = read_seat_config()
 total_booking = read_rows_in_booking(filename)
-seats,seats_name  = generate_seat_map()
+seats,seats_name = generate_seat_map()
 empty_seat_row = create_seat_tracker()
 
 class test_after_total_seats(unittest.TestCase):
