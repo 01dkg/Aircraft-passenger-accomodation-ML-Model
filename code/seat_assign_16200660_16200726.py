@@ -139,10 +139,10 @@ def check_empty_file(filename):
     try:
         df = pd.read_csv(filename, header=None)
         if len(df) ==0:
-            print("Empty File")
             exit(0)
     except pd.io.common.EmptyDataError:
         print("Empty File")
+        exit(0)
 
 def call_validity_functions(passenger_name,no_of_passenger):
     try:
@@ -150,6 +150,7 @@ def call_validity_functions(passenger_name,no_of_passenger):
         is_no_of_passenger_invalid_entry(no_of_passenger)
     except Exception:
         print("Empty File")
+        exit(0)
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Tracker Functions                                                      #
