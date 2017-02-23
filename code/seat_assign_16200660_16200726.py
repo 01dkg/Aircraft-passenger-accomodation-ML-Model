@@ -25,8 +25,6 @@ import numpy as np
 #                                                                                                                     #
 #######################################################################################################################
                                         #Acceting booking csv file name as second system argument
-db = 'airline_seating.db'
-filename = 'bookings.csv'
 
 
 
@@ -35,7 +33,7 @@ filename = 'bookings.csv'
 
 
 def read_seat_config():
-    conn = sqlite3.connect(db)                                                               #Connecting to the database
+    conn = sqlite3.connect(sys.argv[1])                                                               #Connecting to the database
     cur = conn.cursor()
     row_data = cur.execute('''SELECT * FROM rows_cols''')               #Reading nrows, seat_config from rows_cols table
     for row in row_data:
@@ -173,7 +171,7 @@ def seats_encoder(row, col):
     row_number = row + 1
     seat_number = seat_config[col]
     seat = str(row_number) + seat_number
-    return seat, row_number, seat_number
+    return seat, row_number, seat_number                  #Computing seat number from matrix index to 1A , 2B etc format
 
 #######################################################################################################################
 #                                                                                                                     #
@@ -191,9 +189,12 @@ def update_seats(conn, seating):
     :param task:
     :return: project id
     """
+
     #sql = ''' UPDATE seating
     #           SET name = ?
     #           WHERE row = ? AND seat = ?'''
+
+    #NOTE: As discussed with you over email. We have to use INSERT INTO values sql query, instead of updating values
 
     sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
     cur = conn.cursor()
