@@ -39,9 +39,17 @@ Integrity and Plagiarism, unless otherwise cited”.
  The desired python program was successfully implemented and this report will discuss the approach followed while creating the program, challenges faced, testing file and alternative approach.
 
 <br><br>
-## Approach
+## Objects
 
+ 1. Object oriented programming has been used to form the program structure and code has been segregated using classes. Program has been divided into 6 classes and functionality of each class will be discussed in the following sections.
+ 2. Matrices (numpy array) has been used to store the seat allocation information (i.e. Seat number and row number) based on the data in .csv file (i.e. bookings.csv). Matrices allow fast processing time compared to lists and dictionaries.
+ 3.
 
+<br><br>
+
+## Method
+
+ 1. Seating configuration has been read from SQL database and a seat map has been generated using matrix
 
 
 
