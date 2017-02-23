@@ -17,7 +17,45 @@
 that it is all our own work as understood by UCD policies on Academic
 Integrity and Plagiarism, unless otherwise cited”.
 
-1. **Signature:**
+1. **Signature :**  <img src="DK.jpg" width="200" height="40">
+
+     Student Name :  DEEPAK KUMAR GUPTA
+
+     Student Number : 16200660
+
+2. **Signature :**  <img src="SG.jpg" width="200" height="40">
+
+     Student Name :  SHRUTI GOYAL
+
+     Student Number : 16200726
+
+<br><br>
+
+   ----
+## Introduction
+
+    The objective of this assignment is to write a python program for an airline
+    to allocate seats to passengers when they make a booking. Seating configuration
+    and number of bookings have been provided to us. Our task is to read the .CSV
+    file from the SQL database and then assign the desired number of seats to the
+    passengers based on the criteria that passengers from the same booking should be
+    seated as close as possible and if not they should be seperated from each other.
+    For the successful creation of the program, it was required of us to insert
+    the seating configuration into SQL database with passenger names alongwith their
+    seat number and update two metrices that represents "Total number of passengers
+    refused of securing seats in plane" and "Total number of passengers seated away
+    from each other in a booking".
+
+    The desired python program was successfully implemented and this report will discuss
+    the approach followed while creating the program, challenges faced, testing file and
+    alternative approach.
+
+<br><br>
+## Approach
+
+
+
+
 
 
 # Functions List:
