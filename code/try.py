@@ -21,10 +21,10 @@ import numpy as np
 #                                         Functions Reading Values from Files and DB                                  #
 #                                                                                                                     #
 #######################################################################################################################
-db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
-filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
-#db = 'test_db.db'
-#filename = 'test_bookings.csv'
+#db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
+#filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
+db = 'airline_seating.db'
+filename = 'bookings.csv'
 
 
 

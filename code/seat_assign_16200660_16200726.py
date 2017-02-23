@@ -1,10 +1,11 @@
 #######################################################################################################################
 #                                                                                                                     #
-#                                  MIS40570: Analytics Research and Implementation                                    #
+#                                MIS40570: Analytics Research and Implementation                                      #
+#                                                                                                                     #
 #                                 ARI Programming Assignment - Airline Seating                                        #
-#                                            Due Date: Feburary 24, 2017                                              #
+#                                           Due Date: Feburary 24, 2017                                               #
 #                                   Author: Deepak Kumar Gupta and Shruti Goyal                                       #
-#                                             16200660           16200726                                             #
+#                                               16200660             16200726                                         #
 #                                                                                                                     #
 #######################################################################################################################
 
@@ -32,10 +33,10 @@ class test_initial_total_seats(unittest.TestCase):
 #                                         Functions Reading Values from Files and DB                                  #
 #                                                                                                                     #
 #######################################################################################################################
-db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
-filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
-#db = 'airline_seating.db'
-#filename = 'bookings.csv'
+#db = sys.argv[1]                                          #Accepting valid database(*.db) name as first system argument
+#filename = sys.argv[2]                                        #Acceting booking csv file name as second system argument
+db = 'test.db'
+filename = 'test_bookings.csv'
 
 
 
@@ -59,12 +60,16 @@ def read_rows_in_booking(filename):                          #Function calculati
     df = pd.read_csv(filename, header=None)
     return len(df)
 
-def read_booking(n,filename):
-    column_names = ['passenger_name, no_of_passenger']
-    df = pd.read_csv(filename, header=None)
-    passenger_name = df.loc[n, 0]                                             #Setting Index to 1 as index starts from 0
-    no_of_passenger = df.loc[n, 1]             #Reading passenger name and no. of passenger from booking file one by one
-    return passenger_name, no_of_passenger
+class read_booking(object):
+    def __init__(self,n,filename):
+        self.n =n
+        self.filename = filename
+
+    def read(self):
+        df = pd.read_csv(filename,header=None)
+        self.passenger_name =df.loc[self.n,0]                                 #Setting Index to 1 as index starts from 0
+        self.no_of_passenger=df.loc[self.n,1]  #Reading passenger name and no. of passenger from booking file one by one
+        return self.passenger_name, self.no_of_passenger
 
 
 
@@ -109,7 +114,7 @@ def check_overbooking():
     nrows, seat_config, seat_col = read_seat_config()
     passenger_total = 0
     for i in range(nrows):
-        passenger_name, no_of_passenger = read_booking(i,filename)
+        passenger_name, no_of_passenger = read_booking.read(i, filename)
         passenger_total += no_of_passenger
     if passenger_total > (seat_col * nrows):
         print("Cannot Proceed: No. of Passenger can't be more than no. of available seats")
@@ -244,19 +249,24 @@ def create_connection(db_file):
 #                                                                                                                     #
 #######################################################################################################################
 
+class single_seat(object):
 
-def single_seat_allocation(passenger_name, no_of_passenger):
-    for i in range(nrows):
-        for j in range(seat_col):
-            if seats[i][j] == 0.0:
-                seats[i][j] = 1.0
-                seats_name[i][j] = passenger_name.split(" ")[0]
-                update_seat_tracker(empty_seat_row, i)
-                seat, row_number, seat_number = seats_encoder(i, j)
-                conn = create_connection(db)
-                with conn:
-                    update_seats(conn, (passenger_name,row_number, seat_number))
-                return i, j
+    def __init__(self,passenger_name,no_of_passenger):
+        self.passenger_name = passenger_name
+        self.no_of_passenger=no_of_passenger
+
+    def single_seat_allocation(self):
+        for i in range(nrows):
+            for j in range(seat_col):
+                if seats[i][j] == 0.0:
+                    seats[i][j] = 1.0
+                    seats_name[i][j] = self.passenger_name.split(" ")[0]
+                    update_seat_tracker(empty_seat_row, i)
+                    seat, row_number, seat_number = seats_encoder(i, j)
+                    conn = create_connection(db)
+                    with conn:
+                        update_seats(conn, (self.passenger_name,row_number, seat_number))
+                    return i, j
 
 
 #######################################################################################################################
@@ -309,13 +319,17 @@ def is_seats_in_a_row(no_of_passenger):
 #                                                                                                                     #
 #######################################################################################################################
 
+class group_seat_case_three(object):
+    def __init__(self,passenger_name,no_of_passenger):
+        self.passenger_name = passenger_name
+        self.no_of_passenger = no_of_passenger
 
-def group_seat_allot_case3(passenger_name, no_of_passenger):
-    no_of_rows = no_of_passenger // seat_col
-    remaining_seats = no_of_passenger % seat_col
-    for i in range(no_of_rows):
-        group_seat_allot(passenger_name, seat_col)
-    group_seat_allot(passenger_name, remaining_seats)
+    def group_seat_allot_case3(self):
+        no_of_rows = self.no_of_passenger // seat_col
+        remaining_seats = self.no_of_passenger % seat_col
+        for i in range(no_of_rows):
+            group_seat_allot(self.passenger_name, seat_col)
+        group_seat_allot(self.passenger_name, remaining_seats)
 
 
 #######################################################################################################################
@@ -328,12 +342,14 @@ def __main__():
     passenger_refused = 0.0
     passenger_seated_away = 0
     for n in range(total_booking):
-
-        passenger_name, no_of_passenger = read_booking(n,filename)
+        readBookingObj = read_booking(n, filename)
+        passenger_name, no_of_passenger = readBookingObj.read()
+        single_seatObj = single_seat(passenger_name,no_of_passenger)
+        group_seat_case_threeObj= group_seat_case_three(passenger_name,no_of_passenger)
         if seats_not_full(empty_seat_row) and total_available_seats(empty_seat_row) >= no_of_passenger:
 
             if no_of_passenger == 1:
-                i, j = single_seat_allocation(passenger_name, no_of_passenger)
+                i, j = single_seatObj.single_seat_allocation()
 
             elif no_of_passenger > 1 and no_of_passenger <= seat_col:
 
@@ -344,16 +360,16 @@ def __main__():
 
                 elif total_available_seats(empty_seat_row) >= no_of_passenger:
                     for i in range(no_of_passenger):
-                        single_seat_allocation(passenger_name, no_of_passenger)
+                        single_seatObj.single_seat_allocation()
                         passenger_seated_away += 1.0
 
             elif no_of_passenger > seat_col:
 
                 if total_available_seats(empty_seat_row) > no_of_passenger:
-                    group_seat_allot_case3(passenger_name, no_of_passenger)
+                    group_seat_case_threeObj.group_seat_allot_case3()
                 elif total_available_seats(empty_seat_row) == no_of_passenger:
                     for i in range(no_of_passenger):
-                        single_seat_allocation(passenger_name, no_of_passenger)
+                        single_seatObj.single_seat_allocation()
                         passenger_seated_away += 1.0
 
         elif total_available_seats(empty_seat_row) == 0:
@@ -387,5 +403,17 @@ nrows, seat_config, seat_col = read_seat_config()
 total_booking = read_rows_in_booking(filename)
 seats,seats_name  = generate_seat_map()
 empty_seat_row = create_seat_tracker()
-__main__()
 
+class test_after_total_seats(unittest.TestCase):
+    def test_total_available_seats(self):
+        seats_available = total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available,60)
+
+    def test_passenger_refused(self):
+        passenger_seated_away ,passenger_refused= __main__()
+        self.assertEqual(passenger_refused,120)
+        self.assertEqual(passenger_seated_away, 2)
+
+if __name__ == '__main__':
+    __main__
+    unittest.main()
