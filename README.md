@@ -49,28 +49,28 @@ Integrity and Plagiarism, unless otherwise cited”.
 
 ## Method
 
- 1. Seating configuration has been read from SQL database and a seat map has been generated using matrices where 0 represents empty seat and 1 represents occupied seat.
+ - Seating configuration has been read from SQL database and a seat map has been generated using matrices where 0 represents empty seat and 1 represents occupied seat.
  
- 2. After seat map has been generated, value of parameters (Passenger Name and Number of passengers) has been read from bookings.csv file.
+ - After seat map has been generated, value of parameters (Passenger Name and Number of passengers) has been read from bookings.csv file.
  
- 3. Based on number of passengers in a booking allocation has been done using following :
+ - Based on number of passengers in a booking allocation has been done using following :
     * Case 1 : When the number of passengers in a booking is equal to 1
     * Case 2 : When the number of passengers in a booking are greater than 1 but less than or equal to total number of seats in a row of the airplane.
     * Case 3 : When the number of passengers in a booking are greater than total number of seats in a row of airplane.
- 4. Appropriate split has been performed whenever passenger in a same party cannot be seated together then the maximum possible passengers alloted seats together and remaining alloted seats using Case 1 algorithm.
+ - Appropriate split has been performed whenever passenger in a same party cannot be seated together then the maximum possible passengers alloted seats together and remaining alloted seats using Case 1 algorithm.
  
- 5. For each seat has been allocated to a passenger, seat matrix, empty seat tracker and database are being updated.
+ - For each seat has been allocated to a passenger, seat matrix, empty seat tracker and database are being updated.
  
  Note : We have used below sql query for updating seat and row of passenger after seat allocation, instead of using UPDATE sql query  as discussed with professor over email.
 ```sql
 sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
 ```
 
- 6. If passenger has been refused to make booking then passenger_refused metric has been updated. 
+ - If passenger has been refused to make booking then passenger_refused metric has been updated. 
  
- 7. Similarly, whenever there is a split in booking passenger_seated_away metric has been updated.
+ - Similarly, whenever there is a split in booking passenger_seated_away metric has been updated.
  
- 8. After all the bookings has been made (when the airplane is full) seat map is being print as below. 
+ - After all the bookings has been made (when the airplane is full) seat map is being print as below. 
 
  Seat Map:
 ```{code}
@@ -90,4 +90,4 @@ sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
 14 ['  Gladys  ' '  Gladys  ' '  Scott   ' '  Scott   ']
 15 ['  Nikki   ' '  Nikki   ' '   Juan   ' '   Juan   ']
 ```
- 9. Passenger refused and passenger seated away are being updated in database after completion of the booking procedure.
+ - Passenger refused and passenger seated away are being updated in database after completion of the booking procedure.
