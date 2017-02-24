@@ -309,6 +309,10 @@ def create_connection(db_file):
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Case 1 : Single Seat Allocation                                             #
+#                                         -------------------------------                                             #
+#                                                                                                                     #
+#  This class has methods which will allot a seat to a passenger whenever a booking is made for a single passenger    #
+#  i.e. no_of_passenger = 1 or whenever we have to split the booking                                                  #
 #                                                                                                                     #
 #######################################################################################################################
 
@@ -335,7 +339,11 @@ class single_seat(object):
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Case 2 : Seat Allocation                                                    #
+#                                         -------------------------                                                   #
 #                           no_of_passenger > 1 or no_of_passenger <= seat_col                                        #
+#                                                                                                                     #
+#  This class has methods which will allot a seat to a passenger whenever a booking is made for passengers greater    #
+#  than 1 or less than / equal to total number of seats in a row                                                      #
 #                                                                                                                     #
 #######################################################################################################################
 class groupSeatCaseTwo(object):
@@ -381,7 +389,12 @@ class groupSeatCaseTwo(object):
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Case 3 : Seat Allocation                                                    #
+#                                         ------------------------                                                    #
+#                                                                                                                     #
 #                                        no_of_passenger > seat_col                                                   #
+#                                                                                                                     #
+#  This class has methods which will allot a seat to a passenger whenever a booking is made for passengers greater    #
+#  than 1 total number of seats in a row                                                                              #
 #                                                                                                                     #
 #######################################################################################################################
 
@@ -402,6 +415,17 @@ class group_seat_case_three(object):
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Main Function Call and Body                                                 #
+#                                         ---------------------------                                                 #
+#                                                                                                                     #
+#  Main() function accept two system arguments: 1. database name and 2. file name of booking.csv                      #
+#  This function will first look through each record in booking.csv file and then class objects are used to call      #
+#  appropriate methods. Also, seat map will print when the aircraft is fully booked along with row number and         #
+#  passenger name                                                                                                     #
+#                                                                                                                     #
+#  This function will allot the seats to passengers based on following criteria:                                      #
+#   1. If number of passengers is equal to 1                                                                          #
+#   2. If number of passengers are greater than 1 but less than or equal to total number of seats in a row of aircraft#
+#   3. If number of passengers are greater than total number of seats in a row of aircraft                            #
 #                                                                                                                     #
 #######################################################################################################################
 def __main__(db,filename):
@@ -466,6 +490,7 @@ def __main__(db,filename):
     print("-----------------------Seat Map of Fully Booked Plan is -----------------------")
     for i in range(nrows):
         try:
+            #UTF-8 decoding is used as numpy array is not working on windows 10 system
             rows = seats_name[i].center(10, fillchar=' ').decode("utf-8")
             row_no = str(i + 1)
             print(row_no, rows)
