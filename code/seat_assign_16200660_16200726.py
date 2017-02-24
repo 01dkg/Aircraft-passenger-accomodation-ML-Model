@@ -236,7 +236,18 @@ def seats_encoder(row, col):
 
 #######################################################################################################################
 #                                                                                                                     #
-#                                         Database Functions                                                          #
+#                                          Database Functions                                                         #
+#                                          -------------------                                                        #
+#                                                                                                                     #
+#  1. update_seats()                                                                                                  #
+#     This function is updating seat number, row number and passenger name in seating table                           #
+#                                                                                                                     #
+#  2. update_metrices()                                                                                               #
+#     This function is updating two metrices : number of passenger refused and number of passengers seated away from  #
+#     each other                                                                                                      #
+#                                                                                                                     #
+#  3. create_connection()                                                                                             #
+#     This function is establishing a database connection                                                             #
 #                                                                                                                     #
 #######################################################################################################################
 
