@@ -531,7 +531,7 @@ class test_after_total_seats(unittest.TestCase):
 
     def test_passenger_refused2(self):
         passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
-        self.assertEqual(passenger_refused,180)
+        self.assertEqual(passenger_refused,120)
 
     def test_read_seat_config(self):
         nrows, seat_config, seat_col = read_seat_config()
