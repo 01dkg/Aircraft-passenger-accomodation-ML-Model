@@ -29,7 +29,15 @@ Integrity and Plagiarism, unless otherwise cited”.
 
      Student Number : 16200726
 
-This a team work and each member has contributed his/her 100% towards this assignment. 
+This is a team work and each member has contributed his/her 100% towards this assignment.
+
+Contribution :
+
+|Name              | Contribution |
+|:----------------:|:--------------:|
+|Deepak Kumar Gupta| Algorithm Design, Coding, Testing, Documentation       |
+|Shruti Goyal      | Algorithm Design, Coding, Testing, Documentation       |
+
 <br><br>
 
    ----
