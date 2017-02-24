@@ -29,6 +29,7 @@ Integrity and Plagiarism, unless otherwise cited”.
 
      Student Number : 16200726
 
+This a team work and each member has contributed his/her 100% towards this assignment. 
 <br><br>
 
    ----
@@ -40,11 +41,17 @@ Integrity and Plagiarism, unless otherwise cited”.
 
 <br><br>
 
-## Discussion (Our Opinion)
+## Discussion (Our Thought)
 
 This assignment turned out to be a great learning for us, we learnt about data structure, classes, unit testing and using database in python programming. However, this assignment can be done using only lists or dictionaries data structure but we found out the most efficient approach is to use sparse matrix using numpy. As we know sparse matrix are efficient, fast to process or perform calculation and easy to store because of binary values. 
     
-Moreover, form the point of computer science data structure this problem can also be solved using graph networks by applying greedy algorithms or greedy approach. That will allocate the seats to passenger in a group together using minimal traversal and by finding out number of empty seats connected to a particular vertex (i.e. finding subgrapgh of empty seats). Also, we can assign weights to the edges between empty node and occupied node which can help to find empty seats in a walk. 
+Moreover, form the point of computer science data structure this problem can also be solved using graph networks by applying greedy algorithms or greedy approach. That will allocate the seats to passenger in a group together using minimal traversal and by finding out number of empty seats connected to a particular vertex (i.e. finding subgrapgh of empty seats). Also, we can assign weights to the edges between empty node and occupied node which can help to find empty seats in a walk.
+<br><br>
+## How to run the program 
+
+To run this code go to Command Prompt(cmd) or terminal and then type:
+> G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
+
 ## Coding Structure
 
  1. Object oriented programming has been used to form the program structure and code has been segregated using classes. Program has been divided into 6 classes and functionality of each class will be discussed in the following sections.
