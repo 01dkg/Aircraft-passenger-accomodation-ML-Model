@@ -31,7 +31,7 @@ Integrity and Plagiarism, unless otherwise cited”.
 
 This is a team work and each member has contributed his/her 100% towards this assignment.
 
-Contribution :
+**Contribution :**
 
 |Name              | Contribution |
 |:----------------:|:--------------:|
@@ -58,8 +58,9 @@ Moreover, form the point of computer science data structure this problem can als
 ## How to run the program 
 
 To run this code go to Command Prompt(cmd) or terminal and then type:
-> G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
-
+```commandline
+G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
+```
 <br><br>
 
 ## Assumptions
@@ -87,7 +88,7 @@ To run this code go to Command Prompt(cmd) or terminal and then type:
  
  - After seat map has been generated, value of parameters (Passenger Name and Number of passengers) has been read from bookings.csv file.
  ##### Before Seat Allocation, Seat Map in matrix form :
- ```python
+ ```commandline
 [[ 0.  0.  0.  0.]
  [ 0.  0.  0.  0.]
  [ 0.  0.  0.  0.]
@@ -105,7 +106,7 @@ To run this code go to Command Prompt(cmd) or terminal and then type:
  [ 0.  0.  0.  0.]]
 ```
  ##### After Seat Allocation, Seat Map in matrix form :
- ```python
+ ```commandline
 [[ 1.  1.  1.  1.]
  [ 1.  1.  1.  1.]
  [ 1.  1.  1.  1.]
@@ -212,7 +213,7 @@ Unit test cases has been created to test :
 
 #####Program output for test.db and bookings1.csv file (Files are available on github).
 
-```python
+```commandline
 G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py test.db bookings1.csv
 Kristen Frost seat -> 1A
 Cruz Hayes seat -> 1C
