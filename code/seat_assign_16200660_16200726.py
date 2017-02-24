@@ -45,8 +45,6 @@ import numpy as np
 #                                                                                                                     #
 #######################################################################################################################
 
-#
-
 
 def read_seat_config():
     conn = sqlite3.connect(sys.argv[1])                                                      #Connecting to the database
@@ -85,6 +83,9 @@ class read_booking(object):
 #                                                                                                                    #
 #                                         Seat Map - Controlling Seats and Booking                                   #
 #                                         ----------------------------------------                                   #
+#                                                                                                                    #
+#  Function Name : generate_seat_map()                                                                               #
+#                                                                                                                    #
 #  Description: This function read the seating configuration of a aircraft from database file, based on which this   #
 #               generate seat map i.e creating numpy matrix of given nrow and seat_config                            #
 #                                                                                                                    #
@@ -105,27 +106,33 @@ def generate_seat_map():
 
 ######################################################################################################################
 #                                                                                                                     #
-#                                         Validity Functions                                                          #
+#                                             Validity Functions                                                      #
+#                                             ------------------                                                      #
+#                                                                                                                     #
+#  1. is_empty_booking_list()                                                                                         #
+#     This function will check if any record in booking .csv file is empty or contains some values.                   #
+#     If the record is missing then it will print the error message to notify the user                                #
+#                                                                                                                     #
+#  2. is_no_of_passenger_invalid_entry()                                                                              #
+#     This function will check if the value of number of passengers is non numeric or negative number                 #
+#     If the value is invalid then it will return the appropriate message to user                                     #
+#                                                                                                                     #
+#  3. seats_not_full()                                                                                                #
+#     This function will check if there are any empty seats in the aircraft                                           #
+#     It will return TRUE if seats are available else FALSE                                                           #
+#                                                                                                                     #
+#  4. valid_nrows_seat_config()                                                                                       #
+#     This function will check if the values nrows and seat config that has been read from database are valid or not  #
+#     If the values are valid then the program will continue else program will terminate                              #
+#                                                                                                                     #
+#  5. check_empty_file()                                                                                              #
+#     This function will check if the bookings.csv file is empty or not                                               #
+#     If the file is empty then program will terminate else continue reading                                          #
+#                                                                                                                     #
+#  6. call_validity_functions()                                                                                       #
+#     This function will call the validity functions to check above mentioned validity functions                      #
 #                                                                                                                     #
 #######################################################################################################################
-
-'''
-Function Name: check_overbooking()
-Description: This function first find the total number of passengers from the booking list, if booking is more than
-the number of available seats in a aircraft then program will exit(0). However, program should accept all passenger till
-it is has no space to accommodate any new passenger.
-'''
-
-
-def check_overbooking():
-    nrows, seat_config, seat_col = read_seat_config()
-    passenger_total = 0
-    for i in range(nrows):
-        passenger_name, no_of_passenger = read_booking.read(i, filename)
-        passenger_total += no_of_passenger
-    if passenger_total > (seat_col * nrows):
-        print("Cannot Proceed: No. of Passenger can't be more than no. of available seats")
-        exit(0)
 
 
 def is_empty_booking_list(passenger_name,no_of_passenger):
