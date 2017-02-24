@@ -7,10 +7,10 @@
 #### <center> Submission Date : 24th Feb, 2017 </center>
 #### <center> MSc Buiness Anaytics - Full Time </center>
 ### Authors :
-|Name  | Student Number |
-|:------:|:--------------:|
-|Deepak Kumar Gupta| 16200660|
-|Shruti Goyal      | 16200726|
+|Name              | Student Number |
+|:----------------:|:--------------:|
+|Deepak Kumar Gupta| 16200660       |
+|Shruti Goyal      | 16200726       |
 
 ### Statement of Authorship
 “We declare that all of the undersigned have contributed to this work and
@@ -122,7 +122,48 @@ sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
 ## Testing
 
 Unit test cases has been created to test :                                                                         
- 1. Total available seats after all the bookings has been made                                                     
+ 1. Total available seats after all the bookings has been made   
+```python
+class test_after_total_seats(unittest.TestCase):
+
+    def __init__(self,testname, db, filename):
+        super(test_after_total_seats, self).__init__(testname)
+        self.db = db
+        self.filename = filename
+
+    def test_total_available_seats(self):
+        seats_available = total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available,0)
+
+    def test_passenger_refused(self):
+        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
+        self.assertEqual(passenger_refused,180)
+
+    def test_passenger_refused2(self):
+        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
+        self.assertEqual(passenger_refused,180)
+
+    def test_read_seat_config(self):
+        nrows, seat_config, seat_col = read_seat_config()
+        self.assertEqual(nrows,15,msg="Reading Correct Rows")
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        # Acceting booking csv file name as second system argument
+        db = sys.argv[1]
+        filename = sys.argv[2]
+        __main__(db,filename)                                                                            #Calling main()
+
+        print("-------------------Testing Data-------------------")
+        suite = unittest.TestSuite()
+        suite.addTest(test_after_total_seats("test_total_available_seats",db,filename))
+        suite.addTest(test_after_total_seats("test_passenger_refused",db,filename))
+        suite.addTest(test_after_total_seats("test_passenger_refused2", 'test.db','test_bookings.csv'))
+        suite.addTest(test_after_total_seats("test_read_seat_config", db, filename))
+        unittest.TextTestRunner().run(suite)
+    else:
+        print("Enter valid *.db and *.csv filenames.")
+```                                                   
  2. Total number of passengers refused to make booking                                                             
  3. If program is reading correct rows from the database  
  
