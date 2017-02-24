@@ -78,7 +78,43 @@ To run this code go to Command Prompt(cmd) or terminal and then type:
  - Seating configuration has been read from SQL database and a seat map has been generated using matrices where 0 represents empty seat and 1 represents occupied seat.
  
  - After seat map has been generated, value of parameters (Passenger Name and Number of passengers) has been read from bookings.csv file.
- 
+ ##### Before Seat Allocation, Seat Map in matrix form :
+ ```python
+[[ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]
+ [ 0.  0.  0.  0.]]
+```
+ ##### After Seat Allocation, Seat Map in matrix form :
+ ```python
+[[ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]
+ [ 1.  1.  1.  1.]]
+```
+
  - Based on number of passengers in a booking allocation has been done using following :
     * Case 1 : When the number of passengers in a booking is equal to 1
     * Case 2 : When the number of passengers in a booking are greater than 1 but less than or equal to total number of seats in a row of the airplane.
@@ -164,3 +200,98 @@ Unit test cases has been created to test :
         self.assertEqual(nrows,15,msg="Reading Correct Rows")
 ```
 
+## Output
+
+#####Program output for test.db and bookings1.csv file (Files are available on github).
+
+```python
+G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py test.db bookings1.csv
+Kristen Frost seat -> 1A
+Cruz Hayes seat -> 1C
+Robert Brailey seat -> 2A
+Robert Brailey seat -> 2C
+Robert Brailey seat -> 2D
+Joseph Bean seat -> 1D
+Passenger Refused So Far 0.0
+Passenger Seated Away 0
+-----------------------Seat Map of Fully Booked Plan is -----------------------
+1 [' Kristen  ' '   Cruz   ' '  Joseph  ']
+2 ['  Robert  ' '  Robert  ' '  Robert  ']
+Unicode Error: try to run from python environment
+Unicode Error: try to run from python environment
+[[ 1.  1.  1.]
+ [ 1.  1.  1.]
+ [ 0.  0.  0.]
+ [ 0.  0.  0.]]
+-------------------Testing Data-------------------
+FKristen Frost seat -> 3A
+Cruz Hayes seat -> 3C
+Robert Brailey seat -> 4A
+Robert Brailey seat -> 4C
+Robert Brailey seat -> 4D
+Joseph Bean seat -> 3D
+Passenger Refused So Far 0.0
+Passenger Seated Away 0
+-----------------------Seat Map of Fully Booked Plan is -----------------------
+1 [' Kristen  ' '   Cruz   ' '  Joseph  ']
+2 ['  Robert  ' '  Robert  ' '  Robert  ']
+3 [' Kristen  ' '   Cruz   ' '  Joseph  ']
+4 ['  Robert  ' '  Robert  ' '  Robert  ']
+[[ 1.  1.  1.]
+ [ 1.  1.  1.]
+ [ 1.  1.  1.]
+ [ 1.  1.  1.]]
+FFlight is Fully Booked  Kristen Frost
+Flight is Fully Booked  Cruz Hayes
+Flight is Fully Booked  Robert Brailey
+Flight is Fully Booked  Joseph Bean
+Passenger Refused So Far 6.0
+Passenger Seated Away 0
+-----------------------Seat Map of Fully Booked Plan is -----------------------
+1 [' Kristen  ' '   Cruz   ' '  Joseph  ']
+2 ['  Robert  ' '  Robert  ' '  Robert  ']
+3 [' Kristen  ' '   Cruz   ' '  Joseph  ']
+4 ['  Robert  ' '  Robert  ' '  Robert  ']
+[[ 1.  1.  1.]
+ [ 1.  1.  1.]
+ [ 1.  1.  1.]
+ [ 1.  1.  1.]]
+FF
+======================================================================
+FAIL: test_total_available_seats (__main__.test_after_total_seats)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "seat_assign_16200660_16200726.py", line 527, in test_total_available_seats
+    self.assertEqual(seats_available,0)
+AssertionError: 6 != 0
+
+======================================================================
+FAIL: test_passenger_refused (__main__.test_after_total_seats)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "seat_assign_16200660_16200726.py", line 531, in test_passenger_refused
+    self.assertEqual(passenger_refused,216)
+AssertionError: 0.0 != 216
+
+======================================================================
+FAIL: test_passenger_refused2 (__main__.test_after_total_seats)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "seat_assign_16200660_16200726.py", line 535, in test_passenger_refused2
+    self.assertEqual(passenger_refused,120)
+AssertionError: 6.0 != 120
+
+======================================================================
+FAIL: test_read_seat_config (__main__.test_after_total_seats)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "seat_assign_16200660_16200726.py", line 539, in test_read_seat_config
+    self.assertEqual(nrows,15,msg="Reading Correct Rows")
+AssertionError: 4 != 15 : Reading Correct Rows
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.262s
+
+FAILED (failures=4)
+
+```

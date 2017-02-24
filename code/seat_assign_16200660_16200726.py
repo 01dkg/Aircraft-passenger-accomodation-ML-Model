@@ -497,6 +497,7 @@ def __main__(db,filename):
             print(row_no, rows)
         except UnicodeDecodeError:
             print("Unicode Error: try to run from python environment ")
+    print(seats)
     return passenger_seated_away, passenger_refused
 
 nrows, seat_config, seat_col = read_seat_config()
@@ -527,7 +528,7 @@ class test_after_total_seats(unittest.TestCase):
 
     def test_passenger_refused(self):
         passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
-        self.assertEqual(passenger_refused,180)
+        self.assertEqual(passenger_refused,216)
 
     def test_passenger_refused2(self):
         passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
