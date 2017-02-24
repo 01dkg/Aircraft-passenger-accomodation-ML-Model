@@ -207,12 +207,12 @@ def create_seat_tracker():
 def update_seat_tracker(empty_seat_row, row):
     val = empty_seat_row[row]
     empty_seat_row[row] = val - 1
-    return empty_seat_row                       #Updating seat tracker list whenever a seat is confirmed to a passenger
+    return empty_seat_row                        #Updating seat tracker list whenever a seat is confirmed to a passenger
 
 
 def total_available_seats(empty_seat_row):
     total_seats= sum(empty_seat_row)
-    return total_seats                                          #Returning total empty seats in the aircraft at a time
+    return total_seats                                            #Returning total empty seats in the aircraft at a time
 
 
 #######################################################################################################################
@@ -482,7 +482,7 @@ def __main__(db,filename):
         else:
             print("System Error")
             exit(0)
-    print("Passenger Refused So Far", passenger_refused)                        #Total no. of Passenger Refused checkin
+    print("Passenger Refused So Far", passenger_refused)                         #Total no. of Passenger Refused checkin
     print("Passenger Seated Away", passenger_seated_away)          #Total no. of Passenger seating away from their group
     conn = create_connection(db)
     with conn:                                     #updating count of passenger refused and seated away in metrics table
@@ -505,6 +505,12 @@ empty_seat_row = create_seat_tracker()
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Unit Testing Class and Functions                                            #
+#                                         ---------------------------------                                           #
+#                                                                                                                     #
+#  Unit test cases has been created to test :                                                                         #
+#   1. Total available seats after all the bookings has been made                                                     #
+#   2. Total number of passengers refused to make booking                                                             #
+#   3. If program is reading correct rows from the database                                                           #
 #                                                                                                                     #
 #######################################################################################################################
 class test_after_total_seats(unittest.TestCase):
@@ -535,7 +541,7 @@ if __name__ == '__main__':
         # Acceting booking csv file name as second system argument
         db = sys.argv[1]
         filename = sys.argv[2]
-        __main__(db,filename)
+        __main__(db,filename)                                                                            #Calling main()
 
         print("-------------------Testing Data-------------------")
         suite = unittest.TestSuite()
