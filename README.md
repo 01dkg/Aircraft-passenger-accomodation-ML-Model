@@ -121,38 +121,13 @@ sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
 <br><br>
 ## Testing
 
-Unit test cases has been created to test :                                                                         
- 1. Total available seats after all the bookings has been made   
 ```python
-class test_after_total_seats(unittest.TestCase):
-
-    def __init__(self,testname, db, filename):
-        super(test_after_total_seats, self).__init__(testname)
-        self.db = db
-        self.filename = filename
-
-    def test_total_available_seats(self):
-        seats_available = total_available_seats(empty_seat_row)
-        self.assertEqual(seats_available,0)
-
-    def test_passenger_refused(self):
-        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
-        self.assertEqual(passenger_refused,180)
-
-    def test_passenger_refused2(self):
-        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
-        self.assertEqual(passenger_refused,180)
-
-    def test_read_seat_config(self):
-        nrows, seat_config, seat_col = read_seat_config()
-        self.assertEqual(nrows,15,msg="Reading Correct Rows")
-
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         # Acceting booking csv file name as second system argument
         db = sys.argv[1]
         filename = sys.argv[2]
-        __main__(db,filename)                                                                            #Calling main()
+        __main__(db,filename)                                                                   
 
         print("-------------------Testing Data-------------------")
         suite = unittest.TestSuite()
@@ -164,6 +139,28 @@ if __name__ == '__main__':
     else:
         print("Enter valid *.db and *.csv filenames.")
 ```                                                   
- 2. Total number of passengers refused to make booking                                                             
- 3. If program is reading correct rows from the database  
- 
+
+To carry out unit testing of functions in this program we have used TestSuite() method of unittest package in python. By using TestSuite() method we can add multiple test case scenario to a Test Suite using addTest() method, this helps in carrying out unit testing thoroughly and rigorously. And this is excellent way of debugging the program.
+
+Unit test cases has been created to test :                                                                         
+ 1. Total available seats after all the bookings has been made : Expected result is 0 and actual value is 0 then test case will pass else fail.  
+ ```python
+    def test_total_available_seats(self):                      
+        seats_available = total_available_seats(empty_seat_row)
+        self.assertEqual(seats_available,0)
+```
+ 2. Total number of passengers refused to make booking : Expected value is 180 and actual value is 180 then test case will pass else fail.
+```python
+    def test_passenger_refused(self):
+        passenger_seated_away ,passenger_refused= __main__(self.db,self.filename)
+        self.assertEqual(passenger_refused,180)
+```                                                              
+ 3. If program is reading correct rows from the database : Expected value is 15 and actual value is 15 then test case will pass else fail.
+    
+    nrows = number of rows read from rows_col
+```python
+    def test_read_seat_config(self):
+        nrows, seat_config, seat_col = read_seat_config()
+        self.assertEqual(nrows,15,msg="Reading Correct Rows")
+```
+
