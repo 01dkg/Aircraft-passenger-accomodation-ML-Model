@@ -59,8 +59,8 @@ Integrity and Plagiarism, unless otherwise cited”.
     * Case 3 : When the number of passengers in a booking are greater than total number of seats in a row of airplane.
  4. Appropriate split has been performed whenever passenger in a same party cannot be seated together then the maximum possible passengers alloted seats together and remaining alloted seats using Case 1 algorithm.
  
- 5. For each seat has been allocated to a passenger, seat matrix, empty seat tracker and database are being updated. 
-
+ 5. For each seat has been allocated to a passenger, seat matrix, empty seat tracker and database are being updated.
+ 
  Note : We have used below sql query for updating seat and row of passenger after seat allocation, instead of using UPDATE sql query  as discussed with professor over email.
 ```sql
 sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
