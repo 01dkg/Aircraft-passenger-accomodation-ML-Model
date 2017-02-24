@@ -7,18 +7,19 @@
 #                                           Due Date: February 24, 2017                                               #
 #                                              MSc Business Analytics                                                 #
 #                                                                                                                     #
-#        Author: Deepak Kumar Gupta and Shruti Goyal                       Professor: Dr James McDermott              #
-#                   16200660             16200726                                                                     #
+# Author: Deepak Kumar Gupta and Shruti Goyal                                                               Professor:#
+#            16200660             16200726                                                          Dr James McDermott#
 #                                                                                                                     #
 #######################################################################################################################
 
 
-# To run this code type:
+#NOTE:
+# To run this code go to Command Prompt(cmd) or terminal and then type:
 # G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
 
 
 ########################################################################################################################
-#                              Importing Libraries desired to implement the algorithm                                  #
+#                           Import libraries and packages required to implement the algorithm                          #
 ########################################################################################################################
 
 import sys
@@ -29,19 +30,26 @@ import numpy as np
 
 ######################################################################################################################
 #                                                                                                                     #
-#                                         Functions Reading Values from Files and DB                                  #
+#                                         Functions Reading Values from Files and Database                            #
+#                                         ------------------------------------------------                            #
+#  1. read_seat_config()                                                                                              #
+#     This function read nrows and seat_config from rows_cols table in database                                       #
+#     seat_col storing the columns in aircraft seat map by calculating length of seat_config variable                 #
+#                                                                                                                     #
+#  2. read_rows_in_booking()                                                                                          #
+#     Function calculating the total number of records in the booking .csv file                                       #
+#     If file is empty then the function will notify the user                                                         #
+#                                                                                                                     #
+#  3. class read_booking()                                                                                            #
+#     This class has functions which read passenger_name and no_of_passengers from booking.csv file line by line      #
 #                                                                                                                     #
 #######################################################################################################################
-                                        #Acceting booking csv file name as second system argument
 
-
-
-#This function read nrows and seat_config from rows_cols table in Database
-# seat_col storing the columns in aircraft seat map by calculating length of seat_config variable
+#
 
 
 def read_seat_config():
-    conn = sqlite3.connect(sys.argv[1])                                                               #Connecting to the database
+    conn = sqlite3.connect(sys.argv[1])                                                      #Connecting to the database
     cur = conn.cursor()
     row_data = cur.execute('''SELECT * FROM rows_cols''')               #Reading nrows, seat_config from rows_cols table
     for row in row_data:
@@ -52,7 +60,7 @@ def read_seat_config():
     return nrows, seat_config, seat_col
 
 
-def read_rows_in_booking(filename):                          #Function calculating the number of record in booking file
+def read_rows_in_booking(filename):
     try:
         df = pd.read_csv(filename, header=None)
         return len(df)
@@ -459,6 +467,7 @@ class test_after_total_seats(unittest.TestCase):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
+        # Acceting booking csv file name as second system argument
         db = sys.argv[1]
         filename = sys.argv[2]
         __main__(db,filename)
