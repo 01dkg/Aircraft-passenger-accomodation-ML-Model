@@ -39,6 +39,12 @@ Integrity and Plagiarism, unless otherwise cited”.
  The desired python program was successfully implemented and this report will discuss the approach followed while creating the program, challenges faced, testing file and alternative approach.
 
 <br><br>
+
+## Discussion (Our Opinion)
+
+This assignment turned out to be a great learning for us, we learnt about data structure, classes, unit testing and using database in python programming. However, this assignment can be done using only lists or dictionaries data structure but we found out the most efficient approach is to use sparse matrix using numpy. As we know sparse matrix are efficient, fast to process or perform calculation and easy to store because of binary values. 
+    
+Moreover, form the point of computer science data structure this problem can also be solved using graph networks by applying greedy algorithms or greedy approach. That will allocate the seats to passenger in a group together using minimal traversal and by finding out number of empty seats connected to a particular vertex (i.e. finding subgrapgh of empty seats). Also, we can assign weights to the edges between empty node and occupied node which can help to find empty seats in a walk. 
 ## Coding Structure
 
  1. Object oriented programming has been used to form the program structure and code has been segregated using classes. Program has been divided into 6 classes and functionality of each class will be discussed in the following sections.
@@ -91,3 +97,11 @@ sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
 15 ['  Nikki   ' '  Nikki   ' '   Juan   ' '   Juan   ']
 ```
  - Passenger refused and passenger seated away are being updated in database after completion of the booking procedure.
+
+## Testing
+
+Unit test cases has been created to test :                                                                         
+ 1. Total available seats after all the bookings has been made                                                     
+ 2. Total number of passengers refused to make booking                                                             
+ 3. If program is reading correct rows from the database  
+ 
