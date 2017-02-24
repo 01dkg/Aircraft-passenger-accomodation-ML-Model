@@ -52,6 +52,19 @@ Moreover, form the point of computer science data structure this problem can als
 To run this code go to Command Prompt(cmd) or terminal and then type:
 > G:\Pycharm_programs\ARI\code>python seat_assign_16200660_16200726.py airline_seating.db bookings.csv
 
+<br><br>
+
+## Assumptions
+
+ 1. Table structure of Seating will remain as is , i.e. Row --- Seat ---  Name
+ 2. Booking.csv file has only passenger_name and no_of_passengers as column names and delimiter is comma(,).
+ 3. All seats are consecutive in a row, there is no aisle or window seat preferences.
+ 4. Airplane has only one kinf of configuration, there are no business class, premium economy or economy class. All seats are considered to be same.
+ 5. Seat allocation is done on first come first serve basis, no seat preference has been considered. 
+ 6. No seat has been allocated to any passenger before hand. All seats are assumed to be empty during the start of program. 
+
+<br><br>
+
 ## Coding Structure
 
  1. Object oriented programming has been used to form the program structure and code has been segregated using classes. Program has been divided into 6 classes and functionality of each class will be discussed in the following sections.
@@ -105,6 +118,7 @@ sql = ''' INSERT INTO seating (name, row,seat) VALUES (? , ? ,? );'''
 ```
  - Passenger refused and passenger seated away are being updated in database after completion of the booking procedure.
 
+<br><br>
 ## Testing
 
 Unit test cases has been created to test :                                                                         
