@@ -217,7 +217,13 @@ def total_available_seats(empty_seat_row):
 
 #######################################################################################################################
 #                                                                                                                     #
-#                                         Seat Encoder Function                                                       #
+#                                               Seat Encoder Function                                                 #
+#                                               -----------------------                                               #
+#                                                                                                                     #
+#  Function Name : seats_encoder()                                                                                    #
+#                                                                                                                     #
+#  Description: This function is computing seat number from matrix index to 1A, 2B etc. It will assign a seat number  #
+#               whenever the seat is alloted to a passenger                                                           #
 #                                                                                                                     #
 #######################################################################################################################
 
@@ -226,7 +232,7 @@ def seats_encoder(row, col):
     row_number = row + 1
     seat_number = seat_config[col]
     seat = str(row_number) + seat_number
-    return seat, row_number, seat_number                  #Computing seat number from matrix index to 1A , 2B etc format
+    return seat, row_number, seat_number
 
 #######################################################################################################################
 #                                                                                                                     #
