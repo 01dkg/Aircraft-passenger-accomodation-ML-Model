@@ -174,9 +174,25 @@ def call_validity_functions(passenger_name,no_of_passenger):
     except Exception:
         print("Empty File")
         exit(0)
+
+
 #######################################################################################################################
 #                                                                                                                     #
 #                                         Seat Tracker Functions                                                      #
+#                                         ----------------------                                                      #
+#                                                                                                                     #
+#  1. create_seat_tracker()                                                                                           #
+#     This function will create a list to read number of total empty seats in the airplane                            #
+#     It will return list empty_seat_row                                                                              #
+#                                                                                                                     #
+#  2. update_seat_tracker                                                                                             #
+#     This function will update the total number of empty seats remaining while any booking is made                   #
+#     It will return the update list empty_seat_row                                                                   #
+#                                                                                                                     #
+#  3. total_available_seats()                                                                                         #
+#     This function will count the total number of seats available in the plane                                       #
+#     This function is created to be used into main() when we have to split the group bookings                        #
+#     It will return the value in total_seats                                                                         #
 #                                                                                                                     #
 #######################################################################################################################
 
