@@ -1,6 +1,4 @@
-<div style="text-align:center"><img src="ucd_smurfit_logo.jpg" width="300" height="100"/></div>
-
-## <center> UCD Analytics Research & Implementation MIS40750 </center>
+## <center>Airline Seating Allocation using Machine learning model to avoid any overbooking, allocating preference seats to passenger and etc </center>
 
 ### <center> Programming Assignment </center>
 
@@ -16,18 +14,6 @@
 “We declare that all of the undersigned have contributed to this work and
 that it is all our own work as understood by UCD policies on Academic
 Integrity and Plagiarism, unless otherwise cited”.
-
-1. **Signature :**  <img src="DK.jpg" width="200" height="40">
-
-     Student Name :  DEEPAK KUMAR GUPTA
-
-     Student Number : 16200660
-
-2. **Signature :**  <img src="SG.jpg" width="200" height="40">
-
-     Student Name :  SHRUTI GOYAL
-
-     Student Number : 16200726
 
 This is a team work and each member has contributed his/her 100% towards this assignment.
 
