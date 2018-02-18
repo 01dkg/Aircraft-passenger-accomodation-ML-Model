@@ -1,0 +1,194 @@
+import sys
+import sqlite3
+import pandas as pd
+import numpy as np
+
+ ######################################################################################################################
+#                                                                                                                     #
+#                                         Functions Reading Values from Files and DB                                  #
+#                                                                                                                     #
+#######################################################################################################################
+
+
+def read_seat_config():
+    conn = sqlite3.connect('airline_seating.db')
+    cur = conn.cursor()
+    row_data = cur.execute('''select * from rows_cols''')
+    for row in row_data:
+        nrows = row[0]
+        seat_config = row[1]
+        seat_col = len(seat_config)
+    return nrows,seat_config,seat_col
+
+
+def read_booking(n):
+    column_names = ['passenger_name, no_of_passenger']
+    df = pd.read_csv('bookings.csv', header=None)
+    passenger_name = df.loc[n,0]  #Setting Index to 1 as index starts from 0
+    no_of_passenger = df.loc[n,1]
+    return passenger_name,no_of_passenger
+
+
+def generate_seat_map():
+    nrows, seat_config, seat_col = read_seat_config()
+    seats = np.zeros(shape=(nrows-1, seat_col-1))
+    return seats, nrows, seat_config, seat_col
+
+
+ ######################################################################################################################
+#                                                                                                                     #
+#                                         Validity Functions                                                          #
+#                                                                                                                     #
+#######################################################################################################################
+
+'''
+Function Name: check_overbooking()
+Description: This function first find the total number of passengers from the booking list, if booking is more than
+the number of available seats in a aircraft then program will exit(0). However, program should accept all passenger till
+it is has no space to accommodate any new passenger.
+'''
+
+
+def check_overbooking():
+    nrows, seat_config, seat_col = read_seat_config()
+    passenger_total =0
+    for i in range(nrows+1):
+        passenger_name, no_of_passenger = read_booking(i)
+        passenger_total +=no_of_passenger
+    if passenger_total > (seat_col*nrows):
+        print("Cannot Proceed: No. of Passenger can't be more than no. of available seats")
+        exit(0)
+
+
+def empty_booking_list():
+    nrows, seat_config, seat_col = read_seat_config()
+    for i in range(nrows + 1):
+        passenger_name, no_of_passenger = read_booking(1)
+        if passenger_name == "" or no_of_passenger ==0 or no_of_passenger == " ":
+            print("Cannot Proceed: Passenger Information is Missing")
+            exit(0)
+#######################################################################################################################
+#                                                                                                                     #
+#                                         Seat Allocation Functions                                                   #
+#                                                                                                                     #
+#######################################################################################################################
+
+
+def allot_seats():
+    for n in range(1,10):
+        passenger_name, no_of_passenger = read_booking(n)
+        if no_of_passenger == 1:
+            i,j = single_seat_allocation(passenger_name,no_of_passenger)
+            print("Seat Allocated to ",passenger_name, " is >>",i,j)
+            break
+        else:
+            family_seat_allocation(passenger_name,no_of_passenger)
+
+def single_seat_allocation(passenger_name,no_of_passenger):
+    seats, nrows, seat_config, seat_col = generate_seat_map()
+    for i in range(nrows-1):
+        for j in range(seat_col-1):
+           if seats[i][j] == 0.0:
+               seats[i][j] = 1.0
+               break;
+        break
+    print(seats)
+    return i,j
+
+
+
+def any_seat_allocation(passenger_name,no_of_passenger):
+    print("Naeee")
+
+
+def family_seat_allocation(passenger_name,no_of_passenger):
+    print("Yayaya")
+allot_seats()
+
+import sys
+import sqlite3
+import pandas as pd
+
+
+def read_seat_config():
+    conn = sqlite3.connect('airline_seating.db')
+    cur = conn.cursor()
+    row_data = cur.execute('''select * from rows_cols''')
+    for row in row_data:
+        nrows = row[0]
+        seat_config = row[1]
+    return nrows,seat_config
+
+
+def create_seat_map():
+    nrows,seat_config = read_seat_config()
+    seat_number = []
+    seats = [{str(nrows)+ltr:'Empty' for ltr in seat_config} for seats in range(1,nrows+1)]
+    for seat_col in range(1,nrows+1):
+        for ltr in seat_config:
+            seat_number.append(str(seat_col) + ltr)
+    return seats, nrows, seat_config, seat_number
+
+create_seat_map()
+
+
+def read_booking(n):
+    column_names = ['passenger_name, no_of_passenger']
+    df = pd.read_csv('bookings.csv', header=None)
+    passenger_name = df.loc[n,0]  #Setting Index to 1 as index starts from 0
+    no_of_passenger = df.loc[n,1]
+    return passenger_name,no_of_passenger
+
+
+def allot_seats():
+    for n in range(1,10):
+        passenger_name, no_of_passenger = read_booking(n)
+        if no_of_passenger == 1:
+            single_seat_allocation(passenger_name,no_of_passenger)
+        else:
+            family_seat_allocation(passenger_name,no_of_passenger)
+
+def single_seat_allocation(passenger_name,no_of_passenger):
+    seats, nrows, seat_config, seat_number = create_seat_map()
+    for i in range(1,nrows+1):
+        for j in seat_number:
+            seatsx = str(j)
+            print(seats[i]['1A'])
+
+
+def any_seat_allocation(passenger_name,no_of_passenger):
+    print("Naeee")
+
+
+def family_seat_allocation(passenger_name,no_of_passenger):
+    print("Yayaya")
+allot_seats()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
