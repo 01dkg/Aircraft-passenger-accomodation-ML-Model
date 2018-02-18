@@ -1,32 +1,3 @@
-## <center>Airline Seating Allocation using Machine learning model to avoid any overbooking, allocating preference seats to passenger and etc </center>
-
-### <center> Programming Assignment </center>
-
-#### <center> Submission Date : 24th Feb, 2017 </center>
-#### <center> MSc Buiness Anaytics - Full Time </center>
-### Authors :
-|Name              | Student Number |
-|:----------------:|:--------------:|
-|Deepak Kumar Gupta| 16200660       |
-|Shruti Goyal      | 16200726       |
-
-### Statement of Authorship
-“We declare that all of the undersigned have contributed to this work and
-that it is all our own work as understood by UCD policies on Academic
-Integrity and Plagiarism, unless otherwise cited”.
-
-This is a team work and each member has contributed his/her 100% towards this assignment.
-
-**Contribution :**
-
-|Name              | Contribution |
-|:----------------:|:--------------:|
-|Deepak Kumar Gupta| Algorithm Design, Coding, Testing, Documentation       |
-|Shruti Goyal      | Algorithm Design, Coding, Testing, Documentation       |
-
-<br><br>
-
-   ----
 ## Introduction
 
  The objective of this assignment is to write a python program for an airline to allocate seats to passengers when they make a booking. Seating configuration and number of bookings have been provided to us. Our task is to read the .CSV file from the SQL database and then assign the desired number of seats to the passengers based on the criteria that passengers from the same booking should be seated as close as possible and if not they should be seperated from each other. For the successful creation of the program, it was required of us to insert the seating configuration into SQL database with passenger names alongwith their seat number and update two metrices that represents "Total number of passengers refused of securing seats in plane" and "Total number of passengers seated away from each other in a booking".
